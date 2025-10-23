@@ -514,7 +514,7 @@
       $('#copyBtn').addEventListener('click', async()=>{
         try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
       })
-      $('#buyPump').href = `https://pump.fun/coin/${addr}`
+      $('#buyPump').href = `https://pump.fun/coin/E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump`
       $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`
     }
 
