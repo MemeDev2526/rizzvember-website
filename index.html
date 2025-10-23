@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rizzvember — Grow the ’Stache. Stack the Rizz.</title>
+  <meta name="description" content="Rizzvember ($RVMB) — meme‑driven Movember campaign on Solana. Transparent donations, community votes, MoBro & MoSista NFTs, and weekly receipts." />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <style>
+    /* =============================
+       BRAND TOKENS (from kit)
+    ============================== */
+    :root{
+      --rvmb-jet:#0D0D0D;        /* primary bg */
+      --rvmb-charcoal:#1A1A1A;   /* surfaces/cards */
+      --rvmb-rizz-red:#E3112A;   /* primary accent */
+      --rvmb-mo-bronze:#C08A3E;  /* moustache/medal accent */
+      --rvmb-stache-brown:#7A4A1A;/* iconography */
+      --rvmb-health-blue:#2D9CDB;/* men’s‑health nod */
+      --rvmb-ivory:#F5F3EF;      /* text on dark */
+      --rvmb-muted:#9AA0A6;      /* secondary text */
+      --rvmb-success:#39D98A;
+      --rvmb-warning:#FFB020;
+      --rvmb-glow:0 0 24px rgba(227,17,42,.45);
+      --rvmb-bronze-glow:0 0 24px rgba(192,138,62,.45);
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:radial-gradient(900px 500px at 10% -10%,rgba(227,17,42,.14),transparent),radial-gradient(900px 500px at 90% -10%,rgba(192,138,62,.12),transparent),var(--rvmb-jet);color:var(--rvmb-ivory);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1200px;margin:0 auto;padding:0 20px}
+    .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.15rem;border-radius:14px;border:1px solid #ffffff1a;background:#ffffff0f;cursor:pointer;font-weight:800;letter-spacing:.2px;transition:.25s ease}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 30px #00000066}
+    .btn.primary{background:linear-gradient(135deg,var(--rvmb-rizz-red),#ff3b3b);border-color:#00000080;box-shadow:var(--rvmb-glow)}
+    .btn.bronze{background:linear-gradient(135deg,var(--rvmb-mo-bronze),#e0b676);color:#1a1206;border-color:#b3833e;box-shadow:var(--rvmb-bronze-glow)}
+    .btn.outline{background:transparent;border:1px solid #ffffff3a}
+    .pill{display:inline-flex;gap:.5rem;align-items:center;padding:.5rem .9rem;border:1px solid #ffffff22;border-radius:999px;background:#ffffff08;backdrop-filter:blur(6px)}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
+
+    /* Header Brand Banner */
+    .brand-hero{position:relative}
+    .brand-hero .banner{position:relative;aspect-ratio:16/6;border-bottom:1px solid #ffffff12;background:url('https://images.unsplash.com/photo-1520975922284-9ce8b12f5ae1?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat}
+    .brand-hero .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,13,.3),rgba(13,13,13,.8))}
+    .brand-hero .title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
+    .brand-hero h1{font-family:"Bebas Neue",system-ui;letter-spacing:1px;font-size:clamp(44px,7.2vw,92px);margin:0;text-shadow:0 4px 30px #000}
+    .brand-hero h1 .red{color:var(--rvmb-rizz-red)}
+    .brand-hero h1 .bronze{color:var(--rvmb-mo-bronze)}
+    .facts{white-space:nowrap;overflow:hidden;border-top:1px solid #ffffff18;border-bottom:1px solid #ffffff18;background:linear-gradient(90deg,rgba(227,17,42,.08),rgba(192,138,62,.08))}
+    .facts .marquee{display:inline-block;padding:10px 0;animation:marq 55s linear infinite}
+    .facts b{color:var(--rvmb-health-blue)}
+    @keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* Nav */
+    nav{position:sticky;top:0;z-index:50;background:rgba(26,26,26,.78);backdrop-filter:blur(10px);border-bottom:1px solid #ffffff14}
+    nav .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:.6rem;font-family:"Bebas Neue";font-size:1.4rem;letter-spacing:.6px}
+    .brand .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 200deg at 50% 50%,var(--rvmb-rizz-red),var(--rvmb-mo-bronze),#ff6b00);box-shadow:var(--rvmb-glow)}
+    .nav-links{display:flex;gap:.6rem;align-items:center}
+
+    /* Contract strip */
+    .contract .card{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;padding:14px;border:1px solid #ffffff12;background:linear-gradient(180deg,#141414,#0e0e0e);border-radius:14px;margin:14px 0}
+    .addr{padding:.6rem .8rem;border-radius:10px;background:#0f1116;border:1px dashed #ffffff2a;letter-spacing:.3px}
+
+    /* Hero (About) */
+    .hero{position:relative;padding:54px 0}
+    .hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:28px;align-items:center}
+    .headline{font-family:"Bebas Neue";line-height:1.02;font-size:clamp(40px,4.6vw,64px);margin:.2rem 0 .6rem}
+    .sub{color:var(--rvmb-muted);font-size:1.06rem}
+    .hero-img{position:relative;aspect-ratio:4/5;border-radius:22px;border:1px solid #ffffff1a;background:
+      radial-gradient(60% 60% at 50% 40%,rgba(227,17,42,.15),transparent),
+      radial-gradient(60% 60% at 60% 70%,rgba(192,138,62,.18),transparent),
+      linear-gradient(180deg,#121212,#0a0a0a);
+      box-shadow:inset 0 0 60px #00000066,0 30px 80px #00000080;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .hero-img::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 30%, transparent 0 60%, rgba(0,0,0,.25) 85%, rgba(0,0,0,.45) 100%);pointer-events:none}
+    .hero-avatar{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:drop-shadow(0 20px 60px rgba(227,17,42,.35))}
+    .hero-avatar{width:82%;filter:drop-shadow(0 20px 60px rgba(227,17,42,.35))}
+
+    /* Sections */
+    .section{padding:70px 0}
+    .section h2{font-family:"Bebas Neue";font-size:clamp(28px,3vw,40px);margin:0 0 6px}
+    .section p.lead{color:var(--rvmb-muted);margin:0 0 22px}
+    .card{border:1px solid #ffffff12;background:linear-gradient(180deg,#151515,#101010);border-radius:18px;padding:18px}
+
+    /* Donation Tracker */
+    .donation-wrap{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}
+    .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .kpi{padding:14px;border-radius:14px;background:#0f1218;border:1px dashed #ffffff1a}
+    .kpi .num{font-family:"Bebas Neue";font-size:2rem}
+    .progress{height:14px;border-radius:999px;background:#1a1c23;overflow:hidden;border:1px solid #ffffff10}
+    .progress>i{display:block;height:100%;width:42%;background:linear-gradient(90deg,var(--rvmb-success),#b6ffcf)}
+    details.txlog{margin-top:14px}
+    summary{cursor:pointer;list-style:none}
+    summary::-webkit-details-marker{display:none}
+    summary .chev{transition:.25s}
+    details[open] summary .chev{transform:rotate(180deg)}
+    .tx-list{margin:14px 0 0;display:grid;gap:10px}
+    .tx{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px;border-radius:12px;background:#0e1016;border:1px solid #ffffff10}
+
+    /* Tokenomics — upgraded hype layout */
+    .tokenomics{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center}
+    .tok-left{display:grid;gap:12px}
+    .badge-row{display:flex;flex-wrap:wrap;gap:8px}
+    .badge-t{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffffff22;border-radius:999px;padding:.45rem .75rem;background:#111}
+    .badge-t b{letter-spacing:.2px}
+    .flow{position:relative;border:1px solid #ffffff14;border-radius:16px;padding:14px;background:radial-gradient(400px 200px at 20% -20%,rgba(227,17,42,.18),transparent),#121212}
+    .flow-rail{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .flow .cell{border:1px solid #ffffff18;border-radius:12px;padding:12px;text-align:center}
+    .flow .cell h4{margin:2px 0 6px;font-family:"Bebas Neue"}
+    .flow .cell .emoji{font-size:22px}
+    .statboard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .stat{border:1px solid #ffffff18;border-radius:12px;padding:12px;background:#101010;text-align:center}
+    .stat .big{font-family:"Bebas Neue";font-size:2rem}
+
+    /* NFT Section */
+    .nft-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .nft-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .nft-kpi{padding:14px;border-radius:14px;background:#0f1218;border:1px dashed #ffffff1a}
+    .gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .thumb{aspect-ratio:1;border-radius:12px;overflow:hidden;border:1px solid #ffffff16;background:#0f0f0f}
+    .thumb img{width:100%;height:100%;object-fit:cover}
+
+    /* Roadmap */
+    .roadmap{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+    .phase{position:relative;padding:18px;border-radius:16px;background:linear-gradient(180deg,#0e1118,#0b0d12);border:2px solid #ffffff12}
+    .phase h3{margin:0 0 8px;font-family:"Bebas Neue"}
+    .phase ul{margin:0;padding-left:18px;color:var(--rvmb-muted)}
+    .phase.done{border-color:rgba(57,217,138,.6);box-shadow:0 0 0 2px rgba(57,217,138,.15) inset}
+    .phase.live{border-color:rgba(227,17,42,.7);box-shadow:0 0 0 2px rgba(227,17,42,.2) inset}
+    .phase .dates{font-size:.9rem;color:var(--rvmb-muted)}
+    .phase .mini-eta{margin-top:8px;display:inline-flex;gap:8px;align-items:center}
+
+    /* Alerts (Buy/Mint/Donate) */
+    #alerts{position:fixed;right:18px;bottom:18px;display:grid;gap:10px;z-index:200}
+    .alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #ffffff20;background:#111;box-shadow:0 14px 40px #00000080}
+    .alert .icon{font-size:22px}
+
+    /* Footer */
+    footer{padding:40px 0;border-top:1px solid #ffffff12;color:var(--rvmb-muted)}
+
+    /* Responsive */
+    @media (max-width:1080px){ .hero .grid, .donation-wrap, .tokenomics, .nft-grid, .roadmap{grid-template-columns:1fr} }
+    @media (max-width:720px){ .nft-kpis{grid-template-columns:repeat(2,1fr)} .gallery{grid-template-columns:repeat(2,1fr)} }
+  </style>
+</head>
+<body>
+  <!-- Particle canvas -->
+  <canvas id="particles" style="position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.28"></canvas>
+
+  <!-- Brand Banner + Facts Marquee -->
+  <header class="brand-hero">
+    <div class="banner"><div class="overlay"></div></div>
+    <div class="title">
+      <h1><span class="red">RIZZ</span>VEMBER <span class="bronze">$RVMB</span></h1>
+      <div class="pill" style="justify-content:center;gap:10px">🥸 Grow the ’stache • 💪🏽 Fund men’s health • 🔗 On Solana</div>
+    </div>
+    <div class="facts"><div id="factsMarquee" class="marquee mono"></div></div>
+  </header>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="container">
+      <div class="row">
+        <div class="brand"><span class="logo"></span> Rizzvember</div>
+        <div class="nav-links">
+          <a class="btn outline" href="#donations">Donations</a>
+          <a class="btn outline" href="#nfts">NFTs</a>
+          <a class="btn outline" href="#roadmap">Roadmap</a>
+          <a class="btn outline" href="#tokenomics">Tokenomics</a>
+          <button class="btn outline" id="audioToggle" aria-pressed="false">🔊 Sound</button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Contract Strip -->
+  <section class="contract container" id="contract">
+    <div class="card">
+      <div class="row" style="gap:10px;flex:1 1 auto;flex-wrap:wrap">
+        <span class="pill">SOL Contract</span>
+        <span class="addr mono" id="caText">E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump</span>
+        <button class="btn" id="copyBtn">📋 Copy</button>
+      </div>
+      <div class="row" style="gap:8px">
+        <a class="btn primary" id="buyPump" target="_blank" rel="noopener">💸 Buy on pump.fun</a>
+        <a class="btn bronze" id="buyRaydium" target="_blank" rel="noopener">↔️ Swap on Raydium</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero / About -->
+  <section class="hero">
+    <div class="container">
+      <div class="grid">
+        <div>
+          <h2 class="headline">Mo growth, mo good — meme‑driven Movember on Solana 🥸🔥</h2>
+          <p class="sub">We channel <b>100% of creator fees to community‑voted charities</b>, post every receipt, and keep the vibes high with MoBro & MoSista NFTs, raids, and IRL collabs. Respectful about health, playful about the ’stache. <span class="mono">#Rizzvember #RVMB #MoBro #MoSista</span></p>
+          <ul class="sub" style="margin:10px 0 0 18px">
+            <li>🔒 Liquidity locked via bonding • 🚫 Renounced (no mint / no freeze)</li>
+            <li>🎗️ Weekly donation votes • 📜 Public receipts thread on X</li>
+            <li>🧢 NFT drops fuel the cause • 💬 Join the raid squads</li>
+          </ul>
+          <div class="row" style="margin-top:16px;gap:10px;flex-wrap:wrap">
+            <a href="#donations" class="btn primary">🎯 Track Donations</a>
+            <a href="#nfts" class="btn outline">🧢 Mint Mo‑Avatars</a>
+            <a href="https://t.me/" target="_blank" rel="noopener" class="btn outline">💬 Join Telegram</a>
+            <a href="https://x.com/" target="_blank" rel="noopener" class="btn outline">🐦 Follow on X</a>
+          </div>
+        </div>
+        <div class="hero-img">
+          <img class="hero-avatar" src="https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1200&auto=format&fit=crop" alt="Rizzvember Avatar — suave bro with legendary moustache" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Donation Tracker -->
+  <section class="section" id="donations">
+    <div class="container">
+      <h2>Donation Tracker 🎗️</h2>
+      <p class="lead">Live tally of funds, top community picks, and a public ledger of every transaction. 100% creator fees go to causes the community votes for.</p>
+      <div class="donation-wrap">
+        <div class="card">
+          <div class="kpis">
+            <div class="kpi"><div class="muted">Available to Donate</div><div class="num" id="availableAmount">$4,320.00</div></div>
+            <div class="kpi"><div class="muted">Total Donated</div><div class="num" id="totalDonated">$12,850.00</div></div>
+            <div class="kpi"><div class="muted">Donations • Tx</div><div class="num"><span id="donationCount">9</span> • <span id="txCount">23</span></div></div>
+          </div>
+          <div style="margin:14px 0 10px" class="muted">Progress to next milestone ($10k)</div>
+          <div class="progress"><i id="progressBar" style="width:43%"></i></div>
+          <details class="txlog">
+            <summary class="row">
+              <span class="pill">Transparency Ledger</span>
+              <span class="chev">⬇️</span>
+              <span class="right muted">All tx links</span>
+            </summary>
+            <div class="tx-list" id="txList"></div>
+          </details>
+        </div>
+        <div class="card">
+          <div class="row" style="justify-content:space-between"><h3 class="muted" style="margin:0">Top Voted Causes</h3><span class="pill">Community Vote</span></div>
+          <div id="topCauses" class="grid2" style="margin-top:10px"></div>
+          <div style="margin-top:10px" class="muted">Want your cause listed? Join the vote in Telegram / X — weekly tallies with on‑chain receipts.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NFTs -->
+  <section class="section" id="nfts">
+    <div class="container">
+      <h2>NFT Drops 🧢💄</h2>
+      <p class="lead">Two collections, one mission. Royalties tracked and routed to donations by community vote.</p>
+
+      <!-- MoBros -->
+      <div class="card" style="margin-bottom:14px">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h3 style="margin:0">MoBros 🥸</h3>
+          <div class="badge-row">
+            <span class="badge-t">🔥 Hype</span>
+            <span class="badge-t">🎗️ Royalties → Donate</span>
+          </div>
+        </div>
+        <div class="nft-kpis" style="margin-top:10px">
+          <div class="nft-kpi"><div class="muted">Claimed</div><div class="num" id="broClaimed" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Minted</div><div class="num" id="broMinted" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Remaining</div><div class="num" id="broRemaining" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Royalties → Donate</div><div class="num" id="broRoyalties" style="font-family:'Bebas Neue';font-size:2rem">$0</div></div>
+        </div>
+        <div class="row" style="margin-top:12px;gap:10px">
+          <a id="broMintNow" class="btn primary" target="_blank" rel="noopener">🧢 Mint MoBro</a>
+          <a id="broLMNFT" class="btn outline" target="_blank" rel="noopener">📦 View Collection</a>
+        </div>
+        <div class="gallery" id="broMints" style="margin-top:10px"></div>
+      </div>
+
+      <!-- MoSistas -->
+      <div class="card">
+        <div class="row" style="justify-content:space-between;align-items:center">
+          <h3 style="margin:0">MoSistas 💄</h3>
+          <div class="badge-row">
+            <span class="badge-t">✨ Style</span>
+            <span class="badge-t">🎗️ Royalties → Donate</span>
+          </div>
+        </div>
+        <div class="nft-kpis" style="margin-top:10px">
+          <div class="nft-kpi"><div class="muted">Claimed</div><div class="num" id="sisClaimed" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Minted</div><div class="num" id="sisMinted" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Remaining</div><div class="num" id="sisRemaining" style="font-family:'Bebas Neue';font-size:2rem">0</div></div>
+          <div class="nft-kpi"><div class="muted">Royalties → Donate</div><div class="num" id="sisRoyalties" style="font-family:'Bebas Neue';font-size:2rem">$0</div></div>
+        </div>
+        <div class="row" style="margin-top:12px;gap:10px">
+          <a id="sisMintNow" class="btn primary" target="_blank" rel="noopener">💄 Mint MoSista</a>
+          <a id="sisLMNFT" class="btn outline" target="_blank" rel="noopener">📦 View Collection</a>
+        </div>
+        <div class="gallery" id="sisMints" style="margin-top:10px"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Tokenomics (punchy & visual) -->
+  <section class="section" id="tokenomics">
+    <div class="container">
+      <h2>Tokenomics 💼</h2>
+      <p class="lead">Simple, transparent, hype‑worthy. Built to funnel clout → charity with receipts every step of the way.</p>
+      <div class="tokenomics">
+        <div class="tok-left">
+          <div class="badge-row">
+            <span class="badge-t">🔒 <b>Liquidity locked</b> (bonding)</span>
+            <span class="badge-t">🧰 <b>Dev/Community 5%</b></span>
+            <span class="badge-t">🎗️ <b>100% creator fees → donations</b></span>
+            <span class="badge-t">🚫 <b>Renounced</b></span>
+            <span class="badge-t">🚫 <b>No mint</b></span>
+            <span class="badge-t">🚫 <b>No freeze</b></span>
+          </div>
+          <div class="flow">
+            <div class="flow-rail">
+              <div class="cell"><div class="emoji">🪙</div><h4>Trades</h4><div class="muted">p u m p . f u n</div></div>
+              <div class="cell"><div class="emoji">📈</div><h4>Creator Fees</h4><div class="muted">auto tracked</div></div>
+              <div class="cell"><div class="emoji">🗳️</div><h4>Weekly Vote</h4><div class="muted">community DAO‑lite</div></div>
+              <div class="cell"><div class="emoji">🎯</div><h4>Donation</h4><div class="muted">tx + receipt</div></div>
+            </div>
+          </div>
+          <div class="statboard">
+            <div class="stat"><div class="muted">Dev / Community</div><div class="big">5%</div></div>
+            <div class="stat"><div class="muted">Liquidity</div><div class="big">Bonded 🔒</div></div>
+            <div class="stat"><div class="muted">Creator Fees</div><div class="big">100% 🎗️</div></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="badge-row" style="margin-bottom:8px">
+            <span class="badge-t">📜 Receipts Thread on X</span>
+            <span class="badge-t">🔗 Wallets Listed</span>
+            <span class="badge-t">🗓️ Votes Fri • 💸 Execute Sun</span>
+          </div>
+          <p class="muted" style="margin:6px 0 0">We don’t slice pies — we show flow. Fees in → vote → donation out. LP locked by bonding. Dev 5% used for rewards, marketing, and extra donations (all posted).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap with timers on every card -->
+  <section class="section" id="roadmap">
+    <div class="container">
+      <h2>Roadmap 🗺️</h2>
+      <p class="lead">Clear phases with receipts. Each card has a live timer — where we are, what’s next, and when it lands.</p>
+      <div class="roadmap" id="roadmapGrid"></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container row" style="justify-content:space-between">
+      <div>© <span id="year"></span> Rizzvember • All transactions public • Built with ❤️</div>
+      <div class="row">
+        <a class="pill" href="#contract">Contract</a>
+        <a class="pill" href="#donations">Donations</a>
+        <a class="pill" href="#nfts">NFTs</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Ambient audio (toggle in nav) -->
+  <audio id="bgAudio" loop preload="auto">
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1b3d2b5fa8.mp3?filename=future-bass-112194.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Alerts stack -->
+  <div id="alerts"></div>
+
+  <script>
+    /* =====================
+       CONFIG — edit here
+    ====================== */
+    const CONFIG = {
+      CONTRACT_ADDRESS: 'E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump',
+      HERO_IMAGE: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1200&auto=format&fit=crop',
+      // Facts marquee: health + playful + jokes
+      FACTS: [
+        "Men die on average ~5 years earlier than women — early checks matter.",
+        "Grow a ’stache, save a bro. It’s science* (*vibes).",
+        "1 in 8 men will be diagnosed with prostate cancer in their lifetime.",
+        "Talking beats bottling — reach out to your bros today.",
+        "Movember has funded 1,250+ men’s health projects globally.",
+        "Handlebar = +10 rizz. Source: definitely real studies.",
+        "Testicular cancer is highly curable when caught early — self‑checks!",
+        // extras
+        "Suicide is a leading cause of death for men under 50 — check in on your circle.",
+        "Walking with a friend beats doom‑scrolling alone. Touch grass together.",
+        "Your barber is not your therapist — but he’s a great start. 💈",
+        "Drink water. Call your dad. Book the check‑up.",
+        // comments
+        "’Stache season > cuffing season.",
+        "Mo’ hair, mo’ flair.",
+        "Financial advice: invest in moustache wax.",
+        // jokes
+        "I grew a moustache to support men’s health. Side effect: +32% charisma.",
+        "Be the reason someone says ‘nice ’stache’ today.",
+        "Gym? I thought you said ‘groom.’ 🥸"
+      ],
+      DONATION: {
+        availableUSD: 4320,
+        totalDonatedUSD: 12850,
+        donationsCount: 9,
+        transactionsCount: 23,
+        milestoneUSD: 10000,
+        topCauses: [
+          { name: "Movember Foundation", pct: 46, url: "https://ca.movember.com/" },
+          { name: "CAMH Foundation", pct: 31, url: "https://www.camh.ca/" },
+          { name: "Canadian Men’s Health Foundation", pct: 23, url: "https://menshealthfoundation.ca/" }
+        ],
+        txLog: [
+          { label: 'Creator Fee → Movember', amount: '$1,200', hash: '3v7…A9K', url: 'https://solscan.io/tx/XXXX' },
+          { label: 'Creator Fee → CAMH', amount: '$950', hash: '6pQ…Lm2', url: 'https://solscan.io/tx/YYYY' },
+          { label: 'Community Wallet Top‑Up', amount: '$500', hash: '9mZ…Qw8', url: 'https://solscan.io/tx/ZZZZ' }
+        ]
+      },
+      // NFTs — separate projects
+      NFT: {
+        bro: {
+          claimed: 0, minted: 0, remaining: 0, royaltiesUSD: 0,
+          collectionUrl: 'https://launchmynft.io/collection/rvmb-mobros',
+          mintUrl: 'https://launchmynft.io/collection/rvmb-mobros/mint',
+          recentThumbs: [
+            'https://images.unsplash.com/photo-1604072366595-e75dc92b693a?q=80&w=600&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=600&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1546608135-e5d7a4e3e66b?q=80&w=600&auto=format&fit=crop'
+          ]
+        },
+        sis: {
+          claimed: 0, minted: 0, remaining: 0, royaltiesUSD: 0,
+          collectionUrl: 'https://launchmynft.io/collection/rvmb-mosistas',
+          mintUrl: 'https://launchmynft.io/collection/rvmb-mosistas/mint',
+          recentThumbs: [
+            'https://images.unsplash.com/photo-1520975922284-9ce8b12f5ae1?q=80&w=600&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1549880338-65ddcdfd017b?q=80&w=600&auto=format&fit=crop',
+            'https://images.unsplash.com/photo-1546842931-886c185b4c8c?q=80&w=600&auto=format&fit=crop'
+          ]
+        }
+      },
+      // Roadmap phases with dates (America/Toronto)
+      ROADMAP: [
+        { key:'pre',  title:'Pre‑Mo Hype', start:'2025-10-01', end:'2025-10-31', status:'live', bullets:[
+          'Launched on pump.fun • token live • X account live',
+          'Contest: recruit Community Manager + Mods',
+          'Daily raids & shills • initial paid promotions',
+          'DEX paid • transparency posts start'] },
+        { key:'w1',   title:'Week 1',       start:'2025-11-01', end:'2025-11-07', status:'next', bullets:[
+          'Telegram opens • daily ’stache posts + holder rewards',
+          'Community vote: creator rewards & royalties allocation',
+          'TikTok account with fundraising goal goes live'] },
+        { key:'w2',   title:'Week 2',       start:'2025-11-08', end:'2025-11-14', status:'next', bullets:[
+          'MoBro + MoSista NFT drop',
+          'IRL giveaways • barber shop collab',
+          'Community vote #2 on creator rewards allocation'] },
+        { key:'w3',   title:'Week 3',       start:'2025-11-15', end:'2025-11-21', status:'next', bullets:[
+          'Full market push • paid boosts • trending',
+          'KOLs & spaces • donation milestone reveal'] },
+        { key:'w4',   title:'Week 4',       start:'2025-11-22', end:'2025-11-30', status:'next', bullets:[
+          'Final donations + impact video',
+          'Post‑mortem + forward plan'] },
+      ],
+      // Alerts mock seed; replace with websocket/subscription
+      ALERTS_SEED: [
+        { type:'buy', who:'5Gk…rV9', msg:'bought', amount:'0.42 SOL of $RVMB'},
+        { type:'mint', who:'9Lm…2Qx', msg:'minted', amount:'MoBro #0123'},
+        { type:'donate', who:'7Za…kP1', msg:'donated', amount:'$150 via TikTok'},
+      ]
+    }
+
+    /* ===================== UTIL ===================== */
+    const $ = (q,el=document)=>el.querySelector(q)
+    const $$ = (q,el=document)=>[...el.querySelectorAll(q)]
+    const fmtUSD = n => n.toLocaleString(undefined,{style:'currency',currency:'USD'})
+
+    /* ======== PARTICLES ======== */
+    function initParticles(){
+      const c = document.getElementById('particles'), x = c.getContext('2d')
+      let w,h; function size(){w=c.width=innerWidth; h=c.height=innerHeight} size(); addEventListener('resize',size)
+      const P = Array.from({length:70},()=>({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*2+0.5, vx:(Math.random()-.5)*.2, vy:(Math.random()-.5)*.2, hue:[0,35,205][Math.floor(Math.random()*3)] }))
+      ;(function step(){ x.clearRect(0,0,w,h); P.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1; x.beginPath(); x.arc(p.x,p.y,p.r,0,Math.PI*2); x.fillStyle=`hsla(${p.hue} 100% 60%/.6)`; x.fill() }); requestAnimationFrame(step) })()
+    }
+
+    /* ======== FACTS MARQUEE ======== */
+    function initFacts(){
+      const m = $('#factsMarquee'); const facts = CONFIG.FACTS
+      const row = facts.concat('•').concat(facts).map(f=>`<span style="padding:0 28px">${f}</span>`).join('')
+      m.innerHTML = row
+    }
+
+    /* ======== CONTRACT ======== */
+    function initContractStrip(){
+      const addr = CONFIG.CONTRACT_ADDRESS
+      $('#caText').textContent = addr
+      $('#copyBtn').addEventListener('click', async()=>{
+        try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
+      })
+      $('#buyPump').href = `https://pump.fun/coin/${addr}`
+      $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`
+    }
+
+    /* ======== DONATIONS ======== */
+    function initDonations(){
+      const d = CONFIG.DONATION
+      $('#availableAmount').textContent = fmtUSD(d.availableUSD)
+      $('#totalDonated').textContent  = fmtUSD(d.totalDonatedUSD)
+      $('#donationCount').textContent = d.donationsCount
+      $('#txCount').textContent       = d.transactionsCount
+      const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD)*100)))
+      $('#progressBar').style.width = pct + '%'
+      // Top causes
+      $('#topCauses').innerHTML = d.topCauses.map(c=>`<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
+      // TX log
+      $('#txList').innerHTML = d.txLog.map(t=>`<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('')
+    }
+
+    /* ======== NFTs ======== */
+    function initNFTs(){
+      const b = CONFIG.NFT.bro, s = CONFIG.NFT.sis
+      // MoBros
+      $('#broClaimed').textContent  = b.claimed
+      $('#broMinted').textContent   = b.minted
+      $('#broRemaining').textContent= b.remaining
+      $('#broRoyalties').textContent= fmtUSD(b.royaltiesUSD)
+      $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl
+      $('#broMints').innerHTML = b.recentThumbs.map(src=>`<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
+      // MoSistas
+      $('#sisClaimed').textContent  = s.claimed
+      $('#sisMinted').textContent   = s.minted
+      $('#sisRemaining').textContent= s.remaining
+      $('#sisRoyalties').textContent= fmtUSD(s.royaltiesUSD)
+      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
+      $('#sisMints').innerHTML = s.recentThumbs.map(src=>`<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
+    }
+
+    /* ======== ROADMAP (timers for each card) ======== */
+    function initRoadmap(){
+      const wrap = $('#roadmapGrid'); const phases = CONFIG.ROADMAP
+      render();
+      setInterval(render, 1000)
+      function render(){
+        const now = new Date()
+        wrap.innerHTML = phases.map(p=>{
+          const start = new Date(p.start+"T00:00:00-04:00")
+          const end   = new Date(p.end+"T23:59:59-04:00")
+          let status = p.status
+          if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live'
+          const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase')
+          let label = 'Starts in'; let target = start
+          if(status==='live'){ label='Ends in'; target=end }
+          if(status==='done'){ label='Ended'; }
+          const timer = status==='done' ? '—' : miniCountdown(target)
+          return `<div class='${cls}'>
+            <h3>${p.title}</h3>
+            <div class='dates'>${start.toLocaleDateString()} – ${end.toLocaleDateString()}</div>
+            <ul>${p.bullets.map(b=>`<li>${status==='done'?'✅ ':''}${b}</li>`).join('')}</ul>
+            <span class='mini-eta pill'>⏳ ${label}: <b class='mono'>${timer}</b></span>
+          </div>`
+        }).join('')
+      }
+    }
+    function miniCountdown(end){
+      const s = Math.max(0, Math.floor((end - new Date())/1000)); const d=Math.floor(s/86400), h=Math.floor((s%86400)/3600), m=Math.floor((s%3600)/60), sec=s%60
+      return `${d}d ${h}h ${m}m ${sec}s`
+    }
+
+    /* ======== ALERTS ======== */
+    function pushAlert({type,who,msg,amount}){
+      const box = document.createElement('div'); box.className='alert'
+      const icon = type==='buy'?'🟢':(type==='mint'?'🧢':'🎯')
+      box.innerHTML = `<div class='icon'>${icon}</div><div><b class='mono'>${who}</b> ${msg} <b>${amount}</b></div>`
+      $('#alerts').prepend(box)
+      box.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,fill:'forwards'})
+      setTimeout(()=>{ box.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}); setTimeout(()=>box.remove(),320)}, 6000)
+    }
+    function seedAlerts(){ CONFIG.ALERTS_SEED.forEach((a,i)=> setTimeout(()=>pushAlert(a), 1200 + i*1400)) }
+    // Placeholder: hook to real‑time feed (Helius WS, Pump/Tensor sockets, LMNFT webhooks)
+    async function startRealtime(){ /* attach here in prod */ }
+
+    /* ======== TOASTS & AUDIO ======== */
+    function toast(msg, err=false){ const t=document.createElement('div'); t.textContent=msg; t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800) }
+    function initAudio(){ const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false; btn.addEventListener('click', async()=>{ try{ if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' } else { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' } }catch(e){ toast('Autoplay blocked — click again to enable') } }) }
+
+    /* ======== INIT ======== */
+    function init(){
+      document.getElementById('year').textContent = new Date().getFullYear()
+      initParticles(); initFacts(); initContractStrip(); initDonations(); initNFTs(); initRoadmap(); initAudio(); seedAlerts(); startRealtime();
+      if(CONFIG.HERO_IMAGE){ document.querySelector('.hero-avatar').src = CONFIG.HERO_IMAGE }
+    }
+    document.addEventListener('DOMContentLoaded', init)
+  </script>
+</body>
+</html>
