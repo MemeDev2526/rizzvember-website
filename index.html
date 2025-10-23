@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rizzvember – Grow the ’stache, stack the rizz</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+    <style>
+        /* Brand colours defined as CSS variables for easy reuse */
+        :root {
+            --rvmb-jet: #0D0D0D;
+            --rvmb-charcoal: #1A1A1A;
+            --rvmb-rizz-red: #E3112A;
+            --rvmb-mo-bronze: #C08A3E;
+            --rvmb-stache-brown: #7A4A1A;
+            --rvmb-health-blue: #2D9CDB;
+            --rvmb-ivory: #F5F3EF;
+            --rvmb-muted: #9AA0A6;
+            --rvmb-success: #39D98A;
+            --rvmb-warning: #FFB020;
+        }
+
+        /* Global resets and typography */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--rvmb-jet);
+            color: var(--rvmb-ivory);
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1px;
+        }
+        a {
+            text-decoration: none;
+            color: var(--rvmb-rizz-red);
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        /* Layout containers */
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        /* Navigation */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background-color: var(--rvmb-charcoal);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.6);
+        }
+        nav .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        nav .logo {
+            font-size: 2rem;
+            color: var(--rvmb-rizz-red);
+        }
+        nav ul {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+        nav li a {
+            color: var(--rvmb-ivory);
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        nav li a:hover {
+            color: var(--rvmb-rizz-red);
+        }
+        /* Top banner with brand image and facts ticker */
+        .top-banner {
+            position: relative;
+            height: 50vh;
+            background: url('https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover no-repeat;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+        }
+        .facts-ticker {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background-color: rgba(13, 13, 13, 0.8);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker-content {
+            display: inline-block;
+            padding-left: 100%;
+            animation: marquee 30s linear infinite;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-100%); }
+        }
+        .ticker-item {
+            display: inline-block;
+            margin-right: 3rem;
+            color: var(--rvmb-mo-bronze);
+            font-style: italic;
+        }
+        /* Contract strip */
+        .contract-strip {
+            background-color: var(--rvmb-charcoal);
+            padding: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 2px solid var(--rvmb-rizz-red);
+        }
+        .contract-address {
+            font-family: monospace;
+            font-size: 0.85rem;
+            background-color: var(--rvmb-jet);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            word-break: break-all;
+        }
+        .btn {
+            background-color: var(--rvmb-rizz-red);
+            color: var(--rvmb-ivory);
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .btn:hover {
+            background-color: var(--rvmb-mo-bronze);
+        }
+        /* Hero section */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 3rem 0;
+            background-color: var(--rvmb-charcoal);
+        }
+        .hero img {
+            border-radius: 50%;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 4px solid var(--rvmb-mo-bronze);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            margin-bottom: 1rem;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--rvmb-rizz-red);
+            margin-bottom: 0.5rem;
+        }
+        .hero p {
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+        }
+        /* Sections */
+        section {
+            margin: 3rem 0;
+        }
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--rvmb-mo-bronze);
+            text-align: center;
+        }
+        /* Donation tracker */
+        .donation-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-around;
+        }
+        .stat-card {
+            flex: 1 1 250px;
+            background-color: var(--rvmb-charcoal);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .stat-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--rvmb-health-blue);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--rvmb-rizz-red);
+        }
+        .progress-container {
+            background-color: var(--rvmb-jet);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: var(--rvmb-mo-bronze);
+            width: 0%;
+        }
+        /* Roadmap */
+        .roadmap {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .roadmap-card {
+            background-color: var(--rvmb-charcoal);
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .roadmap-card.complete {
+            border-left: 5px solid var(--rvmb-success);
+        }
+        .roadmap-card.current {
+            border-left: 5px solid var(--rvmb-rizz-red);
+        }
+        .roadmap-card.upcoming {
+            border-left: 5px solid var(--rvmb-muted);
+        }
+        .countdown {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--rvmb-muted);
+        }
+        /* Tokenomics ribbon */
+        .token-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .flow-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .flow-item span {
+            font-weight: 600;
+            color: var(--rvmb-rizz-red);
+        }
+        .arrow {
+            font-size: 1.5rem;
+        }
+        /* NFT sections */
+        .nft-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: space-around;
+        }
+        .nft-card {
+            flex: 1 1 300px;
+            background-color: var(--rvmb-charcoal);
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+        }
+        .nft-card h3 {
+            font-size: 1.6rem;
+            margin-bottom: 0.5rem;
+            color: var(--rvmb-health-blue);
+        }
+        .nft-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+        .nft-stat {
+            background-color: var(--rvmb-jet);
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+        .mint-btn {
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        /* Alerts */
+        .alert-container {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            z-index: 2000;
+        }
+        .alert {
+            background-color: var(--rvmb-charcoal);
+            border-left: 4px solid var(--rvmb-mo-bronze);
+            padding: 0.75rem 1rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            animation: fadeInOut 8s forwards;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; transform: translateX(20px); }
+            10% { opacity: 1; transform: translateX(0); }
+            90% { opacity: 1; transform: translateX(0); }
+            100% { opacity: 0; transform: translateX(20px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">RVMB</div>
+            <ul>
+                <li><a href="#hero">Home</a></li>
+                <li><a href="#donation">Donations</a></li>
+                <li><a href="#roadmap">Roadmap</a></li>
+                <li><a href="#tokenomics">Tokenomics</a></li>
+                <li><a href="#nfts">NFTs</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Top Banner with facts ticker -->
+    <div class="top-banner">
+        <div class="facts-ticker">
+            <div class="ticker-content" id="facts-ticker">
+                <!-- Facts inserted by script -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Contract strip -->
+    <div class="contract-strip container">
+        <div class="contract-address" id="contract-address">0xABCDEF1234567890ABCDEF1234567890ABCDEF12</div>
+        <button class="btn" onclick="copyContract()">Copy CA 📋</button>
+        <button class="btn" onclick="window.open('https://pump.fun/','_blank')">Buy $RVMB 💸</button>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero container">
+        <img src="https://images.pexels.com/photos/812894/pexels-photo-812894.jpeg?auto=compress&cs=tinysrgb&w=1200" alt="Epic moustache hero">
+        <h1>Grow the ’stache. Stack the rizz.</h1>
+        <p>Rizzvember is a meme-powered Movember on Solana turning moustache hype into real men’s health donations. Join the revolution by holding $RVMB, minting MoBro & MoSista NFTs, and voting where the funds go. 🥸🔥</p>
+        <button class="btn" onclick="window.open('https://pump.fun/','_blank')">Get $RVMB Now</button>
+    </section>
+
+    <!-- Donation Tracker Section -->
+    <section id="donation" class="container">
+        <h2 class="section-title">Donation Tracker</h2>
+        <div class="donation-stats">
+            <div class="stat-card">
+                <h3>Funds Available</h3>
+                <div class="stat-value" id="funds-available">$5,000</div>
+                <div class="progress-container"><div class="progress-bar" id="funds-progress" style="width:50%"></div></div>
+            </div>
+            <div class="stat-card">
+                <h3>Top Causes (Voted)</h3>
+                <div id="top-causes">
+                    <p>1. Prostate Cancer Research 🧪</p>
+                    <p>2. Men’s Mental Health 🧠</p>
+                    <p>3. Testicular Cancer Support 🎗️</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Donated</h3>
+                <div class="stat-value" id="total-donated">$2,500</div>
+                <div><a href="#" style="color:var(--rvmb-health-blue)">View receipts →</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="container">
+        <h2 class="section-title">Roadmap</h2>
+        <div class="roadmap" id="roadmap-cards">
+            <!-- Cards inserted by script -->
+        </div>
+    </section>
+
+    <!-- Tokenomics Section -->
+    <section id="tokenomics" class="container">
+        <h2 class="section-title">Tokenomics</h2>
+        <p style="text-align:center; max-width:700px; margin:0 auto 2rem;">A simple, clear and hype narrative: $RVMB launched on pump.fun with liquidity locked via bonding. 5% of supply goes to rewards, marketing and direct donations. 100% of creator fees are donated to causes you vote for. No mint, no freeze, renounced. Receipts posted on X.</p>
+        <div class="token-flow">
+            <div class="flow-item"><span>Launch</span> <div class="arrow">→</div> pump.fun (Bonding)</div>
+            <div class="flow-item"><span>5% Allocation</span> <div class="arrow">→</div> Rewards/Marketing/Donations</div>
+            <div class="flow-item"><span>Creator Fees</span> <div class="arrow">→</div> Community-Voted Charity</div>
+            <div class="flow-item"><span>Controls</span> <div class="arrow">→</div> Renounced · No mint · No freeze</div>
+        </div>
+    </section>
+
+    <!-- NFTs Section -->
+    <section id="nfts" class="container">
+        <h2 class="section-title">NFT Collections</h2>
+        <div class="nft-section">
+            <!-- MoBros -->
+            <div class="nft-card">
+                <h3>MoBros 🧔</h3>
+                <div class="nft-stats">
+                    <div class="nft-stat">Claimed: <span id="mobros-claimed">0</span></div>
+                    <div class="nft-stat">Minted: <span id="mobros-minted">0</span></div>
+                    <div class="nft-stat">Remaining: <span id="mobros-remaining">1000</span></div>
+                    <div class="nft-stat">Royalties: <span id="mobros-royalties">0 SOL</span></div>
+                </div>
+                <button class="btn mint-btn" onclick="window.open('https://launchmynft.com/','_blank')">Mint MoBro →</button>
+            </div>
+            <!-- MoSistas -->
+            <div class="nft-card">
+                <h3>MoSistas 👩</h3>
+                <div class="nft-stats">
+                    <div class="nft-stat">Claimed: <span id="mosistas-claimed">0</span></div>
+                    <div class="nft-stat">Minted: <span id="mosistas-minted">0</span></div>
+                    <div class="nft-stat">Remaining: <span id="mosistas-remaining">1000</span></div>
+                    <div class="nft-stat">Royalties: <span id="mosistas-royalties">0 SOL</span></div>
+                </div>
+                <button class="btn mint-btn" onclick="window.open('https://launchmynft.com/','_blank')">Mint MoSista →</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alerts Container -->
+    <div class="alert-container" id="alert-container"></div>
+
+    <!-- Scripts -->
+    <script>
+        // Facts and jokes about men’s health and Movember (edit to taste)
+        const facts = [
+            'Men die on average 6 years earlier than women – grow a Mo to raise awareness.',
+            'Testicular cancer is the most common cancer in men aged 15–34.',
+            'Mo’ stache, mo’ swagger – science says moustaches boost confidence.',
+            'Real men talk about their feelings. MoBros do it on-chain.',
+            'Legend says every moustache hair grants +1 rizz.',
+            'Don’t just look good, do good – donate while you degen.',
+            'Laughter is healthy! Just like our NFTs (well, almost).'
+        ];
+        function populateTicker() {
+            const tickerEl = document.getElementById('facts-ticker');
+            const span = document.createElement('span');
+            facts.forEach((fact, idx) => {
+                const item = document.createElement('span');
+                item.className = 'ticker-item';
+                item.textContent = fact;
+                span.appendChild(item);
+            });
+            // Duplicate content for seamless loop
+            tickerEl.appendChild(span.cloneNode(true));
+            tickerEl.appendChild(span);
+        }
+        // Copy contract address to clipboard
+        function copyContract() {
+            const addr = document.getElementById('contract-address').textContent;
+            navigator.clipboard.writeText(addr).then(() => {
+                pushAlert('Copied contract address: ' + addr.slice(0,6) + '…' + addr.slice(-4));
+            });
+        }
+        // Alert notifications
+        function pushAlert(message) {
+            const container = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = 'alert';
+            alert.textContent = message;
+            container.appendChild(alert);
+            // Remove after animation
+            setTimeout(() => {
+                alert.remove();
+            }, 8000);
+        }
+        // Roadmap phases with dates
+        const roadmapData = [
+            {
+                title: 'Pre-Mo Hype',
+                period: 'Live now → Oct 31, 2025',
+                endDate: new Date('2025-10-31T23:59:59'),
+                status: 'current',
+                details: 'Launch token, recruit community managers & mods, begin promotions and pinned posts.'
+            },
+            {
+                title: 'Week 1',
+                period: 'Nov 1–7, 2025',
+                endDate: new Date('2025-11-07T23:59:59'),
+                status: 'upcoming',
+                details: 'Telegram opens, daily rewards for moustache posts, raids & shills, DEX listing, community vote (Nov 7).'
+            },
+            {
+                title: 'Week 2',
+                period: 'Nov 8–14, 2025',
+                endDate: new Date('2025-11-14T23:59:59'),
+                status: 'upcoming',
+                details: 'MoBro & MoSista NFT drop, first IRL giveaways & barber collab, community vote (Nov 14).'
+            },
+            {
+                title: 'Week 3',
+                period: 'Nov 15–21, 2025',
+                endDate: new Date('2025-11-21T23:59:59'),
+                status: 'upcoming',
+                details: 'Full market hype with KOLs, contests, IRL showcase, community vote (Nov 21).'
+            },
+            {
+                title: 'Week 4',
+                period: 'Nov 22–30, 2025',
+                endDate: new Date('2025-11-30T23:59:59'),
+                status: 'upcoming',
+                details: 'Mega Mo-Day events, Best ’Stache Awards, full impact report (Nov 30).'
+            },
+            {
+                title: 'Week 5',
+                period: 'Dec 1–7, 2025',
+                endDate: new Date('2025-12-07T23:59:59'),
+                status: 'upcoming',
+                details: 'Rizzmas prep & hype, RizzYear teasers, poll on monthly donations.'
+            }
+        ];
+        function renderRoadmap() {
+            const now = new Date();
+            const container = document.getElementById('roadmap-cards');
+            roadmapData.forEach((phase) => {
+                const card = document.createElement('div');
+                // Determine status
+                if (now > phase.endDate) {
+                    card.classList.add('roadmap-card','complete');
+                } else if (now <= phase.endDate && now >= new Date(phase.endDate.getTime() - 7 * 24 * 60 * 60 * 1000)) {
+                    // Within current week window
+                    card.classList.add('roadmap-card','current');
+                    phase.status = 'current';
+                } else {
+                    card.classList.add('roadmap-card','upcoming');
+                }
+                // Title & period
+                const h3 = document.createElement('h3');
+                h3.textContent = `${phase.title} (${phase.period})`;
+                card.appendChild(h3);
+                const p = document.createElement('p');
+                p.textContent = phase.details;
+                card.appendChild(p);
+                // Countdown
+                const countdown = document.createElement('div');
+                countdown.className = 'countdown';
+                countdown.dataset.end = phase.endDate;
+                card.appendChild(countdown);
+                container.appendChild(card);
+            });
+        }
+        function updateCountdowns() {
+            const counters = document.querySelectorAll('.countdown');
+            counters.forEach(counter => {
+                const end = new Date(counter.dataset.end);
+                const now = new Date();
+                let diff = end - now;
+                if (diff < 0) diff = 0;
+                const days = Math.floor(diff / (1000*60*60*24));
+                const hrs = Math.floor((diff/(1000*60*60)) % 24);
+                const mins = Math.floor((diff/(1000*60)) % 60);
+                counter.textContent = `Time left: ${days}d ${hrs}h ${mins}m`;
+            });
+        }
+        // Initialize content on DOM ready
+        document.addEventListener('DOMContentLoaded', () => {
+            populateTicker();
+            renderRoadmap();
+            updateCountdowns();
+            setInterval(updateCountdowns, 60000); // Update every minute
+            // Example alerts to show how they look – remove or replace with real events
+            setTimeout(() => { pushAlert('0x5Gk…rV9 bought 0.42 SOL of $RVMB'); }, 5000);
+            setTimeout(() => { pushAlert('0x9Lm…2Qx minted MoBro #0123'); }, 10000);
+            setTimeout(() => { pushAlert('0x7Za…kP1 donated $150'); }, 15000);
+        });
+    </script>
+</body>
+</html>
