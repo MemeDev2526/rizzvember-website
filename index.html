@@ -76,7 +76,17 @@
       box-shadow:inset 0 0 60px #00000066,0 30px 80px #00000080;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .hero-img::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 30%, transparent 0 60%, rgba(0,0,0,.25) 85%, rgba(0,0,0,.45) 100%);pointer-events:none}
     .hero-avatar{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:drop-shadow(0 20px 60px rgba(227,17,42,.35))}
-    .hero-avatar{width:82%;filter:drop-shadow(0 20px 60px rgba(227,17,42,.35))}
+    /* Hero carousel */
+    .hero-carousel{position:absolute;inset:0}
+    .hc-slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;background-size:cover;background-position:center 40%}
+    .hc-slide.active{opacity:1}
+    .hc-nav{position:absolute;top:50%;transform:translateY(-50%);border:1px solid #ffffff2a;background:#00000066;color:#fff;border-radius:12px;padding:.4rem .7rem;cursor:pointer}
+    .hc-nav:hover{background:#00000088}
+    .hc-nav.prev{left:10px}
+    .hc-nav.next{right:10px}
+    .hc-dots{position:absolute;left:50%;bottom:10px;transform:translateX(-50%);display:flex;gap:8px}
+    .hc-dots button{width:8px;height:8px;border-radius:999px;border:1px solid #ffffff66;background:#ffffff22;cursor:pointer}
+    .hc-dots button.active{background:var(--rvmb-rizz-red);border-color:#000}
 
     /* Sections */
     .section{padding:70px 0}
@@ -205,12 +215,16 @@
           <div class="row" style="margin-top:16px;gap:10px;flex-wrap:wrap">
             <a href="#donations" class="btn primary">🎯 Track Donations</a>
             <a href="#nfts" class="btn outline">🧢 Mint Mo‑Avatars</a>
-            <a href="https://t.me/" target="_blank" rel="noopener" class="btn outline">💬 Join Telegram</a>
-            <a href="https://x.com/" target="_blank" rel="noopener" class="btn outline">🐦 Follow on X</a>
+            <a id="tgLink" href="#" target="_blank" rel="noopener" class="btn outline">💬 Join Telegram</a>
+            <a id="xLink" href="#" target="_blank" rel="noopener" class="btn outline">🐦 Follow on X</a>
           </div>
         </div>
         <div class="hero-img">
-          <img class="hero-avatar" src="https://images.unsplash.com/photo-1516826957135-700dedea698c?q=80&w=1200&auto=format&fit=crop" alt="Rizzvember Avatar — suave bro with legendary moustache" />
+          <div id="heroCarousel" class="hero-carousel" aria-label="Featured moustache gallery">
+            <button class="hc-nav prev" aria-label="Previous">‹</button>
+            <button class="hc-nav next" aria-label="Next">›</button>
+            <div class="hc-dots" id="heroDots"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -377,6 +391,9 @@
     const CONFIG = {
       CONTRACT_ADDRESS: 'E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump',
       HERO_IMAGE: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1200&auto=format&fit=crop',
+      HERO_CAROUSEL: { basePath:'/assets', prefix:'Hero', count:3, ext:'jpg', autoAdvanceMs:4500 },
+      SOCIALS: { telegram:'', x:'' },
+      API: { donations:'/api/donations', nfts:'/api/nfts', alertsStream:'/stream/alerts', alertsPoll:'/api/alerts' },
       // Facts marquee: health + playful + jokes
       FACTS: [
         "Men die on average ~5 years earlier than women — early checks matter.",
@@ -502,30 +519,51 @@
     }
 
     /* ======== DONATIONS ======== */
-    function initDonations(){
-      const d = CONFIG.DONATION
+    async function loadDonations(){
+      try{
+        const r = await fetch(CONFIG.API.donations, {cache:'no-store'});
+        if(r.ok){ CONFIG.DONATION = await r.json(); }
+      }catch(e){ /* fallback to CONFIG.DONATION */ }
+      renderDonations(CONFIG.DONATION)
+    }
+    function renderDonations(d){
       $('#availableAmount').textContent = fmtUSD(d.availableUSD)
       $('#totalDonated').textContent  = fmtUSD(d.totalDonatedUSD)
       $('#donationCount').textContent = d.donationsCount
       $('#txCount').textContent       = d.transactionsCount
       const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD)*100)))
       $('#progressBar').style.width = pct + '%'
-      // Top causes
-      $('#topCauses').innerHTML = d.topCauses.map(c=>`<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
+      $('#topCauses').innerHTML = d.topCauses.map(c=>`<a class=\"btn outline\" href=\"${c.url}\" target=\"_blank\" rel=\"noopener\" style=\"justify-content:space-between\"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
+      $('#txList').innerHTML = d.txLog.map(t=>`<div class=\"tx\"><div><div><b>${t.label}</b> <span class=\"muted\">${t.hash}</span></div><div class=\"muted\">${t.amount}</div></div><a class=\"pill\" href=\"${t.url}\" target=\"_blank\" rel=\"noopener\">View tx ↗</a></div>`).join('')
+    }" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
       // TX log
       $('#txList').innerHTML = d.txLog.map(t=>`<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('')
     }
 
     /* ======== NFTs ======== */
-    function initNFTs(){
-      const b = CONFIG.NFT.bro, s = CONFIG.NFT.sis
-      // MoBros
+    async function loadNFTs(){
+      try{
+        const r = await fetch(CONFIG.API.nfts, {cache:'no-store'});
+        if(r.ok){ CONFIG.NFT = await r.json(); }
+      }catch(e){ /* fallback to CONFIG.NFT */ }
+      renderNFTs(CONFIG.NFT)
+    }
+    function renderNFTs(data){
+      const b = data.bro, s = data.sis
       $('#broClaimed').textContent  = b.claimed
       $('#broMinted').textContent   = b.minted
       $('#broRemaining').textContent= b.remaining
       $('#broRoyalties').textContent= fmtUSD(b.royaltiesUSD)
       $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl
-      $('#broMints').innerHTML = b.recentThumbs.map(src=>`<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
+      $('#broMints').innerHTML = (b.recentThumbs||[]).map(src=>`<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
+
+      $('#sisClaimed').textContent  = s.claimed
+      $('#sisMinted').textContent   = s.minted
+      $('#sisRemaining').textContent= s.remaining
+      $('#sisRoyalties').textContent= fmtUSD(s.royaltiesUSD)
+      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
+      $('#sisMints').innerHTML = (s.recentThumbs||[]).map(src=>`<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
+    }' alt='mobro mint'/></div>`).join('')
       // MoSistas
       $('#sisClaimed').textContent  = s.claimed
       $('#sisMinted').textContent   = s.minted
@@ -576,18 +614,60 @@
       setTimeout(()=>{ box.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}); setTimeout(()=>box.remove(),320)}, 6000)
     }
     function seedAlerts(){ CONFIG.ALERTS_SEED.forEach((a,i)=> setTimeout(()=>pushAlert(a), 1200 + i*1400)) }
-    // Placeholder: hook to real‑time feed (Helius WS, Pump/Tensor sockets, LMNFT webhooks)
-    async function startRealtime(){ /* attach here in prod */ }
+    async function startRealtime(){
+      // Try SSE first
+      try{
+        const es = new EventSource(CONFIG.API.alertsStream)
+        es.onmessage = (ev)=>{ try{ const a = JSON.parse(ev.data); if(a && a.type) pushAlert(a) }catch{} }
+        es.onerror = ()=>{ es.close(); startPoll() }
+      }catch(e){ startPoll() }
+      function startPoll(){
+        let since = Date.now()
+        setInterval(async()=>{
+          try{ const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'}); if(r.ok){ const arr = await r.json(); arr.forEach(a=>pushAlert(a)); since = Date.now() } }catch(e){}
+        }, 12000)
+      }
+    }
 
     /* ======== TOASTS & AUDIO ======== */
     function toast(msg, err=false){ const t=document.createElement('div'); t.textContent=msg; t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800) }
     function initAudio(){ const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false; btn.addEventListener('click', async()=>{ try{ if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' } else { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' } }catch(e){ toast('Autoplay blocked — click again to enable') } }) }
 
+    /* ======== HERO CAROUSEL ======== */
+    function buildHeroList(){
+      const hc = CONFIG.HERO_CAROUSEL
+      if(!hc || !hc.count) return [CONFIG.HERO_IMAGE]
+      return Array.from({length:hc.count},(_,i)=>`${hc.basePath}/${hc.prefix}${i+1}.${hc.ext}`)
+    }
+    function initHeroCarousel(){
+      const list = buildHeroList(); const root = $('#heroCarousel'), dots = $('#heroDots'); if(!root) return
+      // build slides
+      root.querySelectorAll('.hc-slide').forEach(n=>n.remove()); dots.innerHTML=''
+      list.forEach((src,idx)=>{
+        const d = document.createElement('div'); d.className='hc-slide'; d.style.backgroundImage=`url('${src}')`; if(idx===0) d.classList.add('active'); root.appendChild(d)
+        const b = document.createElement('button'); if(idx===0) b.classList.add('active'); b.addEventListener('click',()=>go(idx)); dots.appendChild(b)
+      })
+      let i=0, N=list.length, timer=null, ms=CONFIG.HERO_CAROUSEL?.autoAdvanceMs||5000
+      const slides = ()=>[...root.querySelectorAll('.hc-slide')]; const dotEls=()=>[...dots.querySelectorAll('button')]
+      function go(n){ i=(n+N)%N; slides().forEach((s,k)=>s.classList.toggle('active',k===i)); dotEls().forEach((d,k)=>d.classList.toggle('active',k===i)) }
+      function play(){ timer = setInterval(()=>go(i+1), ms) }
+      function stop(){ timer && clearInterval(timer) }
+      root.addEventListener('mouseenter', stop); root.addEventListener('mouseleave', play)
+      root.querySelector('.hc-nav.prev').onclick=()=>{ stop(); go(i-1); play() }
+      root.querySelector('.hc-nav.next').onclick=()=>{ stop(); go(i+1); play() }
+      play()
+    }
+
     /* ======== INIT ======== */
     function init(){
       document.getElementById('year').textContent = new Date().getFullYear()
-      initParticles(); initFacts(); initContractStrip(); initDonations(); initNFTs(); initRoadmap(); initAudio(); seedAlerts(); startRealtime();
-      if(CONFIG.HERO_IMAGE){ document.querySelector('.hero-avatar').src = CONFIG.HERO_IMAGE }
+      initParticles(); initFacts(); initContractStrip();
+      // Initial render from CONFIG then live updates
+      renderDonations(CONFIG.DONATION); renderNFTs(CONFIG.NFT);
+      loadDonations(); loadNFTs(); setInterval(loadDonations, 30000); setInterval(loadNFTs, 30000);
+      initRoadmap(); initAudio(); seedAlerts(); startRealtime(); initHeroCarousel();
+      if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a) a.href=CONFIG.SOCIALS.telegram }
+      if(CONFIG.SOCIALS?.x){ const a=$('#xLink'); if(a) a.href=CONFIG.SOCIALS.x }
     }
     document.addEventListener('DOMContentLoaded', init)
   </script>
