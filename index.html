@@ -10,18 +10,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
   <style>
-    /* =============================
-       BRAND TOKENS (from kit)
-    ============================== */
     :root{
-      --rvmb-jet:#0D0D0D;        /* primary bg */
-      --rvmb-charcoal:#1A1A1A;   /* surfaces/cards */
-      --rvmb-rizz-red:#E3112A;   /* primary accent */
-      --rvmb-mo-bronze:#C08A3E;  /* moustache/medal accent */
-      --rvmb-stache-brown:#7A4A1A;/* iconography */
-      --rvmb-health-blue:#2D9CDB;/* men’s-health nod */
-      --rvmb-ivory:#F5F3EF;      /* text on dark */
-      --rvmb-muted:#9AA0A6;      /* secondary text */
+      --rvmb-jet:#0D0D0D;
+      --rvmb-charcoal:#1A1A1A;
+      --rvmb-rizz-red:#E3112A;
+      --rvmb-mo-bronze:#C08A3E;
+      --rvmb-stache-brown:#7A4A1A;
+      --rvmb-health-blue:#2D9CDB;
+      --rvmb-ivory:#F5F3EF;
+      --rvmb-muted:#9AA0A6;
       --rvmb-success:#39D98A;
       --rvmb-warning:#FFB020;
       --rvmb-glow:0 0 24px rgba(227,17,42,.45);
@@ -42,7 +39,7 @@
 
     /* Header Brand Banner */
     .brand-hero{position:relative}
-    .brand-hero .banner{position:relative;aspect-ratio:16/6;border-bottom:1px solid #ffffff12;background:url('https://images.unsplash.com/photo-1520975922284-9ce8b12f5ae1?q=80&w=1920&auto=format&fit=crop') center/cover no-repeat}
+    .brand-hero .banner{position:relative;width:100%;aspect-ratio:16/6;min-height:260px;border-bottom:1px solid #ffffff12;background:#0d0d0d center/cover no-repeat}
     .brand-hero .overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(13,13,13,.3),rgba(13,13,13,.8))}
     .brand-hero .title{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center}
     .brand-hero h1{font-family:"Bebas Neue",system-ui;letter-spacing:1px;font-size:clamp(44px,7.2vw,92px);margin:0;text-shadow:0 4px 30px #000}
@@ -57,9 +54,11 @@
     nav{position:sticky;top:0;z-index:50;background:rgba(26,26,26,.78);backdrop-filter:blur(10px);border-bottom:1px solid #ffffff14}
     nav .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
     .brand{display:flex;align-items:center;gap:.6rem;font-family:"Bebas Neue";font-size:1.4rem;letter-spacing:.6px}
-    .brand .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 200deg at 50% 50%,var(--rvmb-rizz-red),var(--rvmb-mo-bronze),#ff6b00);box-shadow:var(--rvmb-glow)}
+    /* LOGO: image instead of color block */
+    .brand .logo{width:36px;height:36px;border-radius:10px;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--rvmb-glow)}
+    .brand .logo img{width:100%;height:100%;object-fit:cover;display:block}
     .nav-links{display:flex;gap:.6rem;align-items:center}
-   
+
     /* Small layout utilities */
     .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
     .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
@@ -80,7 +79,7 @@
       linear-gradient(180deg,#121212,#0a0a0a);
       box-shadow:inset 0 0 60px #00000066,0 30px 80px #00000080;display:flex;align-items:center;justify-content:center;overflow:hidden}
     .hero-img::after{content:"";position:absolute;inset:0;background:radial-gradient(70% 60% at 50% 30%, transparent 0 60%, rgba(0,0,0,.25) 85%, rgba(0,0,0,.45) 100%);pointer-events:none}
-    .hero-avatar{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:drop-shadow(0 20px 60px rgba(227,17,42,.35))}
+
     /* Hero carousel */
     .hero-carousel{position:absolute;inset:0}
     .hc-slide{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;background-size:cover;background-position:center 40%}
@@ -114,7 +113,7 @@
     .tx-list{margin:14px 0 0;display:grid;gap:10px}
     .tx{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:10px;border-radius:12px;background:#0e1016;border:1px solid #ffffff10}
 
-    /* Tokenomics — upgraded hype layout */
+    /* Tokenomics */
     .tokenomics{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center}
     .tok-left{display:grid;gap:12px}
     .badge-row{display:flex;flex-wrap:wrap;gap:8px}
@@ -129,7 +128,7 @@
     .stat{border:1px solid #ffffff18;border-radius:12px;padding:12px;background:#101010;text-align:center}
     .stat .big{font-family:"Bebas Neue";font-size:2rem}
 
-    /* NFT Section */
+    /* NFT */
     .nft-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
     .nft-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
     .nft-kpi{padding:14px;border-radius:14px;background:#0f1218;border:1px dashed #ffffff1a}
@@ -147,7 +146,7 @@
     .phase .dates{font-size:.9rem;color:var(--rvmb-muted)}
     .phase .mini-eta{margin-top:8px;display:inline-flex;gap:8px;align-items:center}
 
-    /* Alerts (Buy/Mint/Donate) */
+    /* Alerts */
     #alerts{position:fixed;right:18px;bottom:18px;display:grid;gap:10px;z-index:200}
     .alert{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px;border:1px solid #ffffff20;background:#111;box-shadow:0 14px 40px #00000080}
     .alert .icon{font-size:22px}
@@ -166,7 +165,7 @@
 
   <!-- Brand Banner + Facts Marquee -->
   <header class="brand-hero">
-    <div class="banner"><div class="overlay"></div></div>
+    <div class="banner" id="topBanner"><div class="overlay"></div></div>
     <div class="title">
       <h1><span class="red">RIZZ</span>VEMBER <span class="bronze">$RVMB</span></h1>
       <div class="pill" style="justify-content:center;gap:10px">🥸 Grow the ’stache • 💪🏽 Fund men’s health • 🔗 On Solana</div>
@@ -178,7 +177,10 @@
   <nav>
     <div class="container">
       <div class="row">
-        <div class="brand"><span class="logo"></span> Rizzvember</div>
+        <div class="brand">
+          <span class="logo"><img id="brandLogo" alt="Rizzvember token"/></span>
+          RIZZVEMBER
+        </div>
         <div class="nav-links">
           <a class="btn outline" href="#donations">Donations</a>
           <a class="btn outline" href="#nfts">NFTs</a>
@@ -320,12 +322,12 @@
     </div>
   </section>
 
-  <!-- Tokenomics (punchy & visual) -->
+  <!-- Tokenomics -->
   <section class="section" id="tokenomics">
     <div class="container">
       <h2>Tokenomics 💼</h2>
       <p class="lead">Simple, transparent, hype-worthy. Built to funnel clout → charity with receipts every step of the way.</p>
-    <div class="tokenomics">
+      <div class="tokenomics">
         <div class="tok-left">
           <div class="badge-row">
             <span class="badge-t">🔒 <b>Liquidity locked</b> (bonding)</span>
@@ -361,7 +363,7 @@
     </div>
   </section>
 
-  <!-- Roadmap with timers on every card -->
+  <!-- Roadmap -->
   <section class="section" id="roadmap">
     <div class="container">
       <h2>Roadmap 🗺️</h2>
@@ -381,22 +383,22 @@
     </div>
   </footer>
 
-  <!-- Ambient audio (toggle in nav) -->
+  <!-- Ambient audio -->
   <audio id="bgAudio" loop preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1b3d2b5fa8.mp3?filename=future-bass-112194.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Alerts stack -->
   <div id="alerts"></div>
 
   <script>
-    /* =====================
-       CONFIG — edit here
-    ====================== */
+    /* ===================== CONFIG ===================== */
     const CONFIG = {
       CONTRACT_ADDRESS: 'E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump',
-      HERO_IMAGE: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1200&auto=format&fit=crop',
-      HERO_CAROUSEL: { basePath:'/assets', prefix:'Hero', count:9, ext:'jpg', autoAdvanceMs:4500 },
+      BRAND_LOGO: './assets/token-logo.png',             // <-- your token image
+      BANNER_IMAGE: './assets/top-banner.jpg',           // <-- banner bg image
+      HERO_IMAGE: './assets/Hero1.jpg',
+      // IMPORTANT: relative path so it works under subfolders (e.g., GitHub Pages)
+      HERO_CAROUSEL: { basePath:'./assets', prefix:'Hero', count:9, ext:'jpg', autoAdvanceMs:4500 },
       SOCIALS: { telegram:'', x:'https://x.com/rizzvember?s=21' },
       API: { donations:'/api/donations', nfts:'/api/nfts', alertsStream:'/stream/alerts', alertsPoll:'/api/alerts' },
       FACTS: [
@@ -509,14 +511,12 @@
     function initContractStrip(){
       const addr = CONFIG.CONTRACT_ADDRESS
       $('#caText').textContent = addr
-
       $('#caText').addEventListener('click', async()=>{
         try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
       })
       $('#copyBtn').addEventListener('click', async()=>{
         try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
       })
-
       $('#buyPump').href    = `https://pump.fun/coin/${addr}`
       $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`
     }
@@ -526,7 +526,7 @@
       try{
         const r = await fetch(CONFIG.API.donations, {cache:'no-store'});
         if(r.ok){ CONFIG.DONATION = await r.json(); }
-      }catch(e){ /* fallback to CONFIG.DONATION */ }
+      }catch(e){ /* fallback */ }
       renderDonations(CONFIG.DONATION)
     }
     function renderDonations(d){
@@ -534,17 +534,10 @@
       $('#totalDonated').textContent    = fmtUSD(d.totalDonatedUSD)
       $('#donationCount').textContent   = d.donationsCount
       $('#txCount').textContent         = d.transactionsCount
-
       const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD) * 100)))
       $('#progressBar').style.width = pct + '%'
-
-      $('#topCauses').innerHTML = d.topCauses
-        .map(c => `<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`)
-        .join('')
-    
-      $('#txList').innerHTML = d.txLog
-        .map(t => `<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`)
-        .join('')
+      $('#topCauses').innerHTML = d.topCauses.map(c => `<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
+      $('#txList').innerHTML = d.txLog.map(t => `<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('')
     }
 
     /* ======== NFTs ======== */
@@ -552,40 +545,29 @@
       try{
         const r = await fetch(CONFIG.API.nfts, {cache:'no-store'});
         if(r.ok){ CONFIG.NFT = await r.json(); }
-      }catch(e){ /* fallback to CONFIG.NFT */ }
+      }catch(e){ /* fallback */ }
       renderNFTs(CONFIG.NFT)
     }
     function renderNFTs(data){
       const b = data.bro, s = data.sis
-
-      // MoBros
       $('#broClaimed').textContent   = b.claimed
       $('#broMinted').textContent    = b.minted
       $('#broRemaining').textContent = b.remaining
       $('#broRoyalties').textContent = fmtUSD(b.royaltiesUSD)
-      $('#broMintNow').href = b.mintUrl
-      $('#broLMNFT').href   = b.collectionUrl
-      $('#broMints').innerHTML = (b.recentThumbs || [])
-        .map(src => `<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`)
-        .join('')
-
-      // MoSistas
+      $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl
+      $('#broMints').innerHTML = (b.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
       $('#sisClaimed').textContent   = s.claimed
       $('#sisMinted').textContent    = s.minted
       $('#sisRemaining').textContent = s.remaining
       $('#sisRoyalties').textContent = fmtUSD(s.royaltiesUSD)
-      $('#sisMintNow').href = s.mintUrl
-      $('#sisLMNFT').href   = s.collectionUrl
-      $('#sisMints').innerHTML = (s.recentThumbs || [])
-        .map(src => `<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`)
-        .join('')
+      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
+      $('#sisMints').innerHTML = (s.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
     }
 
-    /* ======== ROADMAP (timers for each card) ======== */
+    /* ======== ROADMAP ======== */
     function initRoadmap(){
       const wrap = $('#roadmapGrid'); const phases = CONFIG.ROADMAP
-      render();
-      setInterval(render, 1000)
+      render(); setInterval(render, 1000)
       function render(){
         const now = new Date()
         wrap.innerHTML = phases.map(p=>{
@@ -594,9 +576,9 @@
           let status = p.status
           if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live'
           const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase')
-          let label = 'Starts in'; let target = start
+          let label = 'Starts in', target = start
           if(status==='live'){ label='Ends in'; target=end }
-          if(status==='done'){ label='Ended'; }
+          if(status==='done'){ label='Ended' }
           const timer = status==='done' ? '—' : miniCountdown(target)
           return `<div class='${cls}'>
             <h3>${p.title}</h3>
@@ -623,7 +605,6 @@
     }
     function seedAlerts(){ CONFIG.ALERTS_SEED.forEach((a,i)=> setTimeout(()=>pushAlert(a), 1200 + i*1400)) }
     async function startRealtime(){
-      // Try SSE first
       try{
         const es = new EventSource(CONFIG.API.alertsStream)
         es.onmessage = (ev)=>{ try{ const a = JSON.parse(ev.data); if(a && a.type) pushAlert(a) }catch{} }
@@ -647,9 +628,18 @@
       if(!hc || !hc.count) return [CONFIG.HERO_IMAGE]
       return Array.from({length:hc.count},(_,i)=>`${hc.basePath}/${hc.prefix}${i+1}.${hc.ext}`)
     }
-    function initHeroCarousel(){
-      const list = buildHeroList(); const root = $('#heroCarousel'), dots = $('#heroDots'); if(!root) return
-      // build slides
+    function preloadImages(srcs){
+      return Promise.all(srcs.map(s => new Promise(res=>{
+        const img = new Image(); img.onload=()=>res(s); img.onerror=()=>res(null); img.src=s;
+      }))).then(list => list.filter(Boolean))
+    }
+    async function initHeroCarousel(){
+      const root = $('#heroCarousel'), dots = $('#heroDots'); if(!root) return
+      let list = buildHeroList()
+      // Preload & drop broken paths (e.g., wrong extension or missing files)
+      list = await preloadImages(list)
+      if(!list.length){ list = [CONFIG.HERO_IMAGE] }
+
       root.querySelectorAll('.hc-slide').forEach(n=>n.remove()); dots.innerHTML=''
       list.forEach((src,idx)=>{
         const d = document.createElement('div'); d.className='hc-slide'; d.style.backgroundImage=`url('${src}')`; if(idx===0) d.classList.add('active'); root.appendChild(d)
@@ -659,7 +649,7 @@
       const slides = ()=>[...root.querySelectorAll('.hc-slide')]; const dotEls=()=>[...dots.querySelectorAll('button')]
       function go(n){ i=(n+N)%N; slides().forEach((s,k)=>s.classList.toggle('active',k===i)); dotEls().forEach((d,k)=>d.classList.toggle('active',k===i)) }
       function play(){ timer = setInterval(()=>go(i+1), ms) }
-      function stop(){ timer && clearInterval(timer) }
+      function stop(){ if(timer){ clearInterval(timer); timer=null } }
       root.addEventListener('mouseenter', stop); root.addEventListener('mouseleave', play)
       root.querySelector('.hc-nav.prev').onclick=()=>{ stop(); go(i-1); play() }
       root.querySelector('.hc-nav.next').onclick=()=>{ stop(); go(i+1); play() }
@@ -669,12 +659,16 @@
     /* ======== INIT ======== */
     function init(){
       document.getElementById('year').textContent = new Date().getFullYear()
+      // images for logo + banner (ensures they show even if CSS bg failed)
+      const logo = $('#brandLogo'); if(logo && CONFIG.BRAND_LOGO) logo.src = CONFIG.BRAND_LOGO
+      const banner = $('#topBanner'); if(banner && CONFIG.BANNER_IMAGE) banner.style.backgroundImage = `url('${CONFIG.BANNER_IMAGE}')`
+
       initParticles(); initFacts(); initContractStrip();
-      // Initial render from CONFIG then live updates
       renderDonations(CONFIG.DONATION); renderNFTs(CONFIG.NFT);
       loadDonations(); loadNFTs(); setInterval(loadDonations, 30000); setInterval(loadNFTs, 30000);
       initRoadmap(); initAudio(); seedAlerts(); startRealtime(); initHeroCarousel();
-      if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a){ a.href=CONFIG.SOCIALS.telegram; a.style.display=''; } }
+
+      if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a && CONFIG.SOCIALS.telegram){ a.href=CONFIG.SOCIALS.telegram; a.style.display=''; } }
       if(CONFIG.SOCIALS?.x){ const a=$('#xLink'); if(a) a.href=CONFIG.SOCIALS.x }
     }
     document.addEventListener('DOMContentLoaded', init)
