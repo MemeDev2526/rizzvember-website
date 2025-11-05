@@ -144,7 +144,7 @@
     .phase ul{margin:0;padding-left:18px;color:var(--rvmb-muted)}
     .phase.done{border-color:rgba(57,217,138,.6);box-shadow:0 0 0 2px rgba(57,217,138,.15) inset}
     .phase.live{border-color:rgba(227,17,42,.7);box-shadow:0 0 0 2px rgba(227,17,42,.2) inset}
-    .phase .dates{font-size:.9rem;color:var(--rvmbMuted, var(--rvmb-muted))}
+    .phase .dates{font-size:.9rem;color:var(--rvmb-muted)}
     .phase .mini-eta{margin-top:8px;display:inline-flex;gap:8px;align-items:center}
 
     /* Alerts (Buy/Mint/Donate) */
@@ -220,7 +220,7 @@
           <div class="row" style="margin-top:16px;gap:10px;flex-wrap:wrap">
             <a href="#donations" class="btn primary">🎯 Track Donations</a>
             <a href="#nfts" class="btn outline">🧢 Mint Mo-Avatars</a>
-            <a id="tgLink" href="#" target="_blank" rel="noopener" class="btn outline">💬 Join Telegram</a>
+            <a id="tgLink" href="#" target="_blank" rel="noopener" class="btn outline" style="display:none">💬 Join Telegram</a>
             <a id="xLink" href="#" target="_blank" rel="noopener" class="btn outline">🐦 Follow on X</a>
           </div>
         </div>
@@ -325,7 +325,7 @@
     <div class="container">
       <h2>Tokenomics 💼</h2>
       <p class="lead">Simple, transparent, hype-worthy. Built to funnel clout → charity with receipts every step of the way.</p>
-      <div class="tokenomics">
+    <div class="tokenomics">
         <div class="tok-left">
           <div class="badge-row">
             <span class="badge-t">🔒 <b>Liquidity locked</b> (bonding)</span>
@@ -399,7 +399,6 @@
       HERO_CAROUSEL: { basePath:'/assets', prefix:'Hero', count:9, ext:'jpg', autoAdvanceMs:4500 },
       SOCIALS: { telegram:'', x:'https://x.com/rizzvember?s=21' },
       API: { donations:'/api/donations', nfts:'/api/nfts', alertsStream:'/stream/alerts', alertsPoll:'/api/alerts' },
-      // Facts marquee: health + playful + jokes
       FACTS: [
         "Men die on average ~5 years earlier than women — early checks matter.",
         "Grow a ’stache, save a bro. It’s science* (*vibes).",
@@ -408,16 +407,13 @@
         "Movember has funded 1,250+ men’s health projects globally.",
         "Handlebar = +10 rizz. Source: definitely real studies.",
         "Testicular cancer is highly curable when caught early — self-checks!",
-        // extras
         "Suicide is a leading cause of death for men under 50 — check in on your circle.",
         "Walking with a friend beats doom-scrolling alone. Touch grass together.",
         "Your barber is not your therapist — but he’s a great start. 💈",
         "Drink water. Call your dad. Book the check-up.",
-        // comments
         "’Stache season > cuffing season.",
         "Mo’ hair, mo’ flair.",
         "Financial advice: invest in moustache wax.",
-        // jokes
         "I grew a moustache to support men’s health. Side effect: +32% charisma.",
         "Be the reason someone says ‘nice ’stache’ today.",
         "Gym? I thought you said ‘groom.’ 🥸"
@@ -439,7 +435,6 @@
           { label: 'Community Wallet Top-Up', amount: '$500', hash: '9mZ…Qw8', url: 'https://solscan.io/tx/ZZZZ' }
         ]
       },
-      // NFTs — separate projects
       NFT: {
         bro: {
           claimed: 0, minted: 0, remaining: 0, royaltiesUSD: 0,
@@ -462,7 +457,6 @@
           ]
         }
       },
-      // Roadmap phases with dates (America/Toronto)
       ROADMAP: [
         { key:'pre',  title:'Pre-Mo Hype', start:'2025-10-01', end:'2025-10-31', status:'live', bullets:[
           'Launched on pump.fun • token live • X account live',
@@ -484,7 +478,6 @@
           'Final donations + impact video',
           'Post-mortem + forward plan'] },
       ],
-      // Alerts mock seed; replace with websocket/subscription
       ALERTS_SEED: [
         { type:'buy', who:'5Gk…rV9', msg:'bought', amount:'0.42 SOL of $RVMB'},
         { type:'mint', who:'9Lm…2Qx', msg:'minted', amount:'MoBro #0123'},
@@ -596,9 +589,8 @@
       function render(){
         const now = new Date()
         wrap.innerHTML = phases.map(p=>{
-          // Parse in local time (America/Toronto) instead of a hardcoded offset
-          const start = new Date(p.start + "T00:00:00")
-          const end   = new Date(p.end   + "T23:59:59")
+          const start = new Date(p.start+"T00:00:00")
+          const end   = new Date(p.end+"T23:59:59")
           let status = p.status
           if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live'
           const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase')
@@ -640,35 +632,14 @@
       function startPoll(){
         let since = Date.now()
         setInterval(async()=>{
-          try{
-            const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'});
-            if(r.ok){
-              const arr = await r.json();
-              arr.forEach(a=>pushAlert(a));
-              since = Date.now()
-            }
-          }catch(e){}
+          try{ const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'}); if(r.ok){ const arr = await r.json(); arr.forEach(a=>pushAlert(a)); since = Date.now() } }catch(e){}
         }, 12000)
       }
     }
 
     /* ======== TOASTS & AUDIO ======== */
-    function toast(msg, err=false){
-      const t=document.createElement('div');
-      t.textContent=msg;
-      t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`;
-      document.body.appendChild(t);
-      setTimeout(()=>t.remove(), 1800)
-    }
-    function initAudio(){
-      const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false;
-      btn.addEventListener('click', async()=>{
-        try{
-          if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' }
-          else   { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' }
-        }catch(e){ toast('Autoplay blocked — click again to enable') }
-      })
-    }
+    function toast(msg, err=false){ const t=document.createElement('div'); t.textContent=msg; t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800) }
+    function initAudio(){ const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false; btn.addEventListener('click', async()=>{ try{ if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' } else { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' } }catch(e){ toast('Autoplay blocked — click again to enable') } }) }
 
     /* ======== HERO CAROUSEL ======== */
     function buildHeroList(){
@@ -703,7 +674,7 @@
       renderDonations(CONFIG.DONATION); renderNFTs(CONFIG.NFT);
       loadDonations(); loadNFTs(); setInterval(loadDonations, 30000); setInterval(loadNFTs, 30000);
       initRoadmap(); initAudio(); seedAlerts(); startRealtime(); initHeroCarousel();
-      if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a) a.href=CONFIG.SOCIALS.telegram }
+      if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a){ a.href=CONFIG.SOCIALS.telegram; a.style.display=''; } }
       if(CONFIG.SOCIALS?.x){ const a=$('#xLink'); if(a) a.href=CONFIG.SOCIALS.x }
     }
     document.addEventListener('DOMContentLoaded', init)
