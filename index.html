@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rizzvember — Grow the ’Stache. Stack the Rizz.</title>
-  <meta name="description" content="Rizzvember ($RVMB) — meme‑driven Movember campaign on Solana. Transparent donations, community votes, MoBro & MoSista NFTs, and weekly receipts." />
+  <meta name="description" content="Rizzvember ($RVMB) — meme-driven Movember campaign on Solana. Transparent donations, community votes, MoBro & MoSista NFTs, and weekly receipts." />
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,7 +19,7 @@
       --rvmb-rizz-red:#E3112A;   /* primary accent */
       --rvmb-mo-bronze:#C08A3E;  /* moustache/medal accent */
       --rvmb-stache-brown:#7A4A1A;/* iconography */
-      --rvmb-health-blue:#2D9CDB;/* men’s‑health nod */
+      --rvmb-health-blue:#2D9CDB;/* men’s-health nod */
       --rvmb-ivory:#F5F3EF;      /* text on dark */
       --rvmb-muted:#9AA0A6;      /* secondary text */
       --rvmb-success:#39D98A;
@@ -59,6 +59,11 @@
     .brand{display:flex;align-items:center;gap:.6rem;font-family:"Bebas Neue";font-size:1.4rem;letter-spacing:.6px}
     .brand .logo{width:36px;height:36px;border-radius:10px;background:conic-gradient(from 200deg at 50% 50%,var(--rvmb-rizz-red),var(--rvmb-mo-bronze),#ff6b00);box-shadow:var(--rvmb-glow)}
     .nav-links{display:flex;gap:.6rem;align-items:center}
+   
+    /* Small layout utilities */
+    .row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap }
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+    @media (max-width:600px){ .grid2{ grid-template-columns:1fr } }
 
     /* Contract strip */
     .contract .card{display:flex;flex-wrap:wrap;gap:.8rem;align-items:center;justify-content:space-between;padding:14px;border:1px solid #ffffff12;background:linear-gradient(180deg,#141414,#0e0e0e);border-radius:14px;margin:14px 0}
@@ -139,7 +144,7 @@
     .phase ul{margin:0;padding-left:18px;color:var(--rvmb-muted)}
     .phase.done{border-color:rgba(57,217,138,.6);box-shadow:0 0 0 2px rgba(57,217,138,.15) inset}
     .phase.live{border-color:rgba(227,17,42,.7);box-shadow:0 0 0 2px rgba(227,17,42,.2) inset}
-    .phase .dates{font-size:.9rem;color:var(--rvmb-muted)}
+    .phase .dates{font-size:.9rem;color:var(--rvmbMuted, var(--rvmb-muted))}
     .phase .mini-eta{margin-top:8px;display:inline-flex;gap:8px;align-items:center}
 
     /* Alerts (Buy/Mint/Donate) */
@@ -205,8 +210,8 @@
     <div class="container">
       <div class="grid">
         <div>
-          <h2 class="headline">Mo growth, mo good — meme‑driven Movember on Solana 🥸🔥</h2>
-          <p class="sub">We channel <b>100% of creator fees to community‑voted charities</b>, post every receipt, and keep the vibes high with MoBro & MoSista NFTs, raids, and IRL collabs. Respectful about health, playful about the ’stache. <span class="mono">#Rizzvember #RVMB #MoBro #MoSista</span></p>
+          <h2 class="headline">Mo growth, mo good — meme-driven Movember on Solana 🥸🔥</h2>
+          <p class="sub">We channel <b>100% of creator fees to community-voted charities</b>, post every receipt, and keep the vibes high with MoBro & MoSista NFTs, raids, and IRL collabs. Respectful about health, playful about the ’stache. <span class="mono">#Rizzvember #RVMB #MoBro #MoSista</span></p>
           <ul class="sub" style="margin:10px 0 0 18px">
             <li>🔒 Liquidity locked via bonding • 🚫 Renounced (no mint / no freeze)</li>
             <li>🎗️ Weekly donation votes • 📜 Public receipts thread on X</li>
@@ -214,7 +219,7 @@
           </ul>
           <div class="row" style="margin-top:16px;gap:10px;flex-wrap:wrap">
             <a href="#donations" class="btn primary">🎯 Track Donations</a>
-            <a href="#nfts" class="btn outline">🧢 Mint Mo‑Avatars</a>
+            <a href="#nfts" class="btn outline">🧢 Mint Mo-Avatars</a>
             <a id="tgLink" href="#" target="_blank" rel="noopener" class="btn outline">💬 Join Telegram</a>
             <a id="xLink" href="#" target="_blank" rel="noopener" class="btn outline">🐦 Follow on X</a>
           </div>
@@ -256,7 +261,7 @@
         <div class="card">
           <div class="row" style="justify-content:space-between"><h3 class="muted" style="margin:0">Top Voted Causes</h3><span class="pill">Community Vote</span></div>
           <div id="topCauses" class="grid2" style="margin-top:10px"></div>
-          <div style="margin-top:10px" class="muted">Want your cause listed? Join the vote in Telegram / X — weekly tallies with on‑chain receipts.</div>
+          <div style="margin-top:10px" class="muted">Want your cause listed? Join the vote in Telegram / X — weekly tallies with on-chain receipts.</div>
         </div>
       </div>
     </div>
@@ -319,7 +324,7 @@
   <section class="section" id="tokenomics">
     <div class="container">
       <h2>Tokenomics 💼</h2>
-      <p class="lead">Simple, transparent, hype‑worthy. Built to funnel clout → charity with receipts every step of the way.</p>
+      <p class="lead">Simple, transparent, hype-worthy. Built to funnel clout → charity with receipts every step of the way.</p>
       <div class="tokenomics">
         <div class="tok-left">
           <div class="badge-row">
@@ -334,7 +339,7 @@
             <div class="flow-rail">
               <div class="cell"><div class="emoji">🪙</div><h4>Trades</h4><div class="muted">p u m p . f u n</div></div>
               <div class="cell"><div class="emoji">📈</div><h4>Creator Fees</h4><div class="muted">auto tracked</div></div>
-              <div class="cell"><div class="emoji">🗳️</div><h4>Weekly Vote</h4><div class="muted">community DAO‑lite</div></div>
+              <div class="cell"><div class="emoji">🗳️</div><h4>Weekly Vote</h4><div class="muted">community DAO-lite</div></div>
               <div class="cell"><div class="emoji">🎯</div><h4>Donation</h4><div class="muted">tx + receipt</div></div>
             </div>
           </div>
@@ -391,8 +396,8 @@
     const CONFIG = {
       CONTRACT_ADDRESS: 'E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump',
       HERO_IMAGE: 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?q=80&w=1200&auto=format&fit=crop',
-      HERO_CAROUSEL: { basePath:'/assets', prefix:'Hero', count:3, ext:'jpg', autoAdvanceMs:4500 },
-      SOCIALS: { telegram:'', x:'' },
+      HERO_CAROUSEL: { basePath:'/assets', prefix:'Hero', count:9, ext:'jpg', autoAdvanceMs:4500 },
+      SOCIALS: { telegram:'', x:'https://x.com/rizzvember?s=21' },
       API: { donations:'/api/donations', nfts:'/api/nfts', alertsStream:'/stream/alerts', alertsPoll:'/api/alerts' },
       // Facts marquee: health + playful + jokes
       FACTS: [
@@ -402,12 +407,12 @@
         "Talking beats bottling — reach out to your bros today.",
         "Movember has funded 1,250+ men’s health projects globally.",
         "Handlebar = +10 rizz. Source: definitely real studies.",
-        "Testicular cancer is highly curable when caught early — self‑checks!",
+        "Testicular cancer is highly curable when caught early — self-checks!",
         // extras
         "Suicide is a leading cause of death for men under 50 — check in on your circle.",
-        "Walking with a friend beats doom‑scrolling alone. Touch grass together.",
+        "Walking with a friend beats doom-scrolling alone. Touch grass together.",
         "Your barber is not your therapist — but he’s a great start. 💈",
-        "Drink water. Call your dad. Book the check‑up.",
+        "Drink water. Call your dad. Book the check-up.",
         // comments
         "’Stache season > cuffing season.",
         "Mo’ hair, mo’ flair.",
@@ -431,7 +436,7 @@
         txLog: [
           { label: 'Creator Fee → Movember', amount: '$1,200', hash: '3v7…A9K', url: 'https://solscan.io/tx/XXXX' },
           { label: 'Creator Fee → CAMH', amount: '$950', hash: '6pQ…Lm2', url: 'https://solscan.io/tx/YYYY' },
-          { label: 'Community Wallet Top‑Up', amount: '$500', hash: '9mZ…Qw8', url: 'https://solscan.io/tx/ZZZZ' }
+          { label: 'Community Wallet Top-Up', amount: '$500', hash: '9mZ…Qw8', url: 'https://solscan.io/tx/ZZZZ' }
         ]
       },
       // NFTs — separate projects
@@ -459,7 +464,7 @@
       },
       // Roadmap phases with dates (America/Toronto)
       ROADMAP: [
-        { key:'pre',  title:'Pre‑Mo Hype', start:'2025-10-01', end:'2025-10-31', status:'live', bullets:[
+        { key:'pre',  title:'Pre-Mo Hype', start:'2025-10-01', end:'2025-10-31', status:'live', bullets:[
           'Launched on pump.fun • token live • X account live',
           'Contest: recruit Community Manager + Mods',
           'Daily raids & shills • initial paid promotions',
@@ -477,7 +482,7 @@
           'KOLs & spaces • donation milestone reveal'] },
         { key:'w4',   title:'Week 4',       start:'2025-11-22', end:'2025-11-30', status:'next', bullets:[
           'Final donations + impact video',
-          'Post‑mortem + forward plan'] },
+          'Post-mortem + forward plan'] },
       ],
       // Alerts mock seed; replace with websocket/subscription
       ALERTS_SEED: [
@@ -511,10 +516,15 @@
     function initContractStrip(){
       const addr = CONFIG.CONTRACT_ADDRESS
       $('#caText').textContent = addr
+
+      $('#caText').addEventListener('click', async()=>{
+        try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
+      })
       $('#copyBtn').addEventListener('click', async()=>{
         try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
       })
-      $('#buyPump').href = `https://pump.fun/coin/E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump`
+
+      $('#buyPump').href    = `https://pump.fun/coin/${addr}`
       $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`
     }
 
@@ -528,16 +538,20 @@
     }
     function renderDonations(d){
       $('#availableAmount').textContent = fmtUSD(d.availableUSD)
-      $('#totalDonated').textContent  = fmtUSD(d.totalDonatedUSD)
-      $('#donationCount').textContent = d.donationsCount
-      $('#txCount').textContent       = d.transactionsCount
-      const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD)*100)))
+      $('#totalDonated').textContent    = fmtUSD(d.totalDonatedUSD)
+      $('#donationCount').textContent   = d.donationsCount
+      $('#txCount').textContent         = d.transactionsCount
+
+      const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD) * 100)))
       $('#progressBar').style.width = pct + '%'
-      $('#topCauses').innerHTML = d.topCauses.map(c=>`<a class=\"btn outline\" href=\"${c.url}\" target=\"_blank\" rel=\"noopener\" style=\"justify-content:space-between\"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
-      $('#txList').innerHTML = d.txLog.map(t=>`<div class=\"tx\"><div><div><b>${t.label}</b> <span class=\"muted\">${t.hash}</span></div><div class=\"muted\">${t.amount}</div></div><a class=\"pill\" href=\"${t.url}\" target=\"_blank\" rel=\"noopener\">View tx ↗</a></div>`).join('')
-    }" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
-      // TX log
-      $('#txList').innerHTML = d.txLog.map(t=>`<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('')
+
+      $('#topCauses').innerHTML = d.topCauses
+        .map(c => `<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`)
+        .join('')
+    
+      $('#txList').innerHTML = d.txLog
+        .map(t => `<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`)
+        .join('')
     }
 
     /* ======== NFTs ======== */
@@ -550,27 +564,28 @@
     }
     function renderNFTs(data){
       const b = data.bro, s = data.sis
-      $('#broClaimed').textContent  = b.claimed
-      $('#broMinted').textContent   = b.minted
-      $('#broRemaining').textContent= b.remaining
-      $('#broRoyalties').textContent= fmtUSD(b.royaltiesUSD)
-      $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl
-      $('#broMints').innerHTML = (b.recentThumbs||[]).map(src=>`<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
 
-      $('#sisClaimed').textContent  = s.claimed
-      $('#sisMinted').textContent   = s.minted
-      $('#sisRemaining').textContent= s.remaining
-      $('#sisRoyalties').textContent= fmtUSD(s.royaltiesUSD)
-      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
-      $('#sisMints').innerHTML = (s.recentThumbs||[]).map(src=>`<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
-    }' alt='mobro mint'/></div>`).join('')
+      // MoBros
+      $('#broClaimed').textContent   = b.claimed
+      $('#broMinted').textContent    = b.minted
+      $('#broRemaining').textContent = b.remaining
+      $('#broRoyalties').textContent = fmtUSD(b.royaltiesUSD)
+      $('#broMintNow').href = b.mintUrl
+      $('#broLMNFT').href   = b.collectionUrl
+      $('#broMints').innerHTML = (b.recentThumbs || [])
+        .map(src => `<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`)
+        .join('')
+
       // MoSistas
-      $('#sisClaimed').textContent  = s.claimed
-      $('#sisMinted').textContent   = s.minted
-      $('#sisRemaining').textContent= s.remaining
-      $('#sisRoyalties').textContent= fmtUSD(s.royaltiesUSD)
-      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
-      $('#sisMints').innerHTML = s.recentThumbs.map(src=>`<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
+      $('#sisClaimed').textContent   = s.claimed
+      $('#sisMinted').textContent    = s.minted
+      $('#sisRemaining').textContent = s.remaining
+      $('#sisRoyalties').textContent = fmtUSD(s.royaltiesUSD)
+      $('#sisMintNow').href = s.mintUrl
+      $('#sisLMNFT').href   = s.collectionUrl
+      $('#sisMints').innerHTML = (s.recentThumbs || [])
+        .map(src => `<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`)
+        .join('')
     }
 
     /* ======== ROADMAP (timers for each card) ======== */
@@ -581,8 +596,9 @@
       function render(){
         const now = new Date()
         wrap.innerHTML = phases.map(p=>{
-          const start = new Date(p.start+"T00:00:00-04:00")
-          const end   = new Date(p.end+"T23:59:59-04:00")
+          // Parse in local time (America/Toronto) instead of a hardcoded offset
+          const start = new Date(p.start + "T00:00:00")
+          const end   = new Date(p.end   + "T23:59:59")
           let status = p.status
           if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live'
           const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase')
@@ -624,14 +640,35 @@
       function startPoll(){
         let since = Date.now()
         setInterval(async()=>{
-          try{ const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'}); if(r.ok){ const arr = await r.json(); arr.forEach(a=>pushAlert(a)); since = Date.now() } }catch(e){}
+          try{
+            const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'});
+            if(r.ok){
+              const arr = await r.json();
+              arr.forEach(a=>pushAlert(a));
+              since = Date.now()
+            }
+          }catch(e){}
         }, 12000)
       }
     }
 
     /* ======== TOASTS & AUDIO ======== */
-    function toast(msg, err=false){ const t=document.createElement('div'); t.textContent=msg; t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800) }
-    function initAudio(){ const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false; btn.addEventListener('click', async()=>{ try{ if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' } else { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' } }catch(e){ toast('Autoplay blocked — click again to enable') } }) }
+    function toast(msg, err=false){
+      const t=document.createElement('div');
+      t.textContent=msg;
+      t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 1800)
+    }
+    function initAudio(){
+      const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false;
+      btn.addEventListener('click', async()=>{
+        try{
+          if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' }
+          else   { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' }
+        }catch(e){ toast('Autoplay blocked — click again to enable') }
+      })
+    }
 
     /* ======== HERO CAROUSEL ======== */
     function buildHeroList(){
