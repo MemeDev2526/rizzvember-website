@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;800&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+
   <style>
     :root{
       --rvmb-jet:#0D0D0D;
@@ -24,9 +25,12 @@
       --rvmb-glow:0 0 24px rgba(227,17,42,.45);
       --rvmb-bronze-glow:0 0 24px rgba(192,138,62,.45);
     }
-
     *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:radial-gradient(900px 500px at 10% -10%,rgba(227,17,42,.14),transparent),radial-gradient(900px 500px at 90% -10%,rgba(192,138,62,.12),transparent),var(--rvmb-jet);color:var(--rvmb-ivory);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    html,body{margin:0;padding:0;background:
+      radial-gradient(900px 500px at 10% -10%,rgba(227,17,42,.14),transparent),
+      radial-gradient(900px 500px at 90% -10%,rgba(192,138,62,.12),transparent),
+      var(--rvmb-jet);
+      color:var(--rvmb-ivory);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
     a{color:inherit;text-decoration:none}
     .container{max-width:1200px;margin:0 auto;padding:0 20px}
     .btn{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 1.15rem;border-radius:14px;border:1px solid #ffffff1a;background:#ffffff0f;cursor:pointer;font-weight:800;letter-spacing:.2px;transition:.25s ease}
@@ -54,7 +58,7 @@
     nav{position:sticky;top:0;z-index:50;background:rgba(26,26,26,.78);backdrop-filter:blur(10px);border-bottom:1px solid #ffffff14}
     nav .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
     .brand{display:flex;align-items:center;gap:.6rem;font-family:"Bebas Neue";font-size:1.4rem;letter-spacing:.6px}
-    /* LOGO: image instead of color block */
+    /* LOGO: token image */
     .brand .logo{width:36px;height:36px;border-radius:10px;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--rvmb-glow)}
     .brand .logo img{width:100%;height:100%;object-fit:cover;display:block}
     .nav-links{display:flex;gap:.6rem;align-items:center}
@@ -186,7 +190,8 @@
           <a class="btn outline" href="#nfts">NFTs</a>
           <a class="btn outline" href="#roadmap">Roadmap</a>
           <a class="btn outline" href="#tokenomics">Tokenomics</a>
-          <button class="btn outline" id="audioToggle" aria-pressed="false">🔊 Sound</button>
+          <!-- Audio Toggle -->
+          <button class="btn outline" id="audioToggle" aria-pressed="false" aria-label="Enable site ambience">🔈 Rizz Audio</button>
         </div>
       </div>
     </div>
@@ -383,9 +388,18 @@
     </div>
   </footer>
 
-  <!-- Ambient audio -->
-  <audio id="bgAudio" loop preload="auto">
-    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_1b3d2b5fa8.mp3?filename=future-bass-112194.mp3" type="audio/mpeg">
+  <!-- Ambient audio: multiple formats, muted by default (user opt-in) -->
+  <audio id="bgAudio" loop preload="auto" muted>
+    <!-- Put your own files in /audio; these are placeholders -->
+    <source src="/audio/rvmb-loop-noir-84bpm-Fdorian.ogg" type="audio/ogg">
+    <source src="/audio/rvmb-loop-noir-84bpm-Fdorian.aac" type="audio/aac">
+    <source src="/audio/rvmb-loop-noir-84bpm-Fdorian.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- (optional) short SFX — only used on explicit clicks when audio is enabled -->
+  <audio id="sfxCoin" preload="auto">
+    <source src="/audio/rvmb-coin-bling.ogg" type="audio/ogg">
+    <source src="/audio/rvmb-coin-bling.mp3" type="audio/mpeg">
   </audio>
 
   <div id="alerts"></div>
@@ -394,10 +408,9 @@
     /* ===================== CONFIG ===================== */
     const CONFIG = {
       CONTRACT_ADDRESS: 'E8FUoQgACRy57PsJUL6YarZaoxpSfnxV6jBEKmf5pump',
-      BRAND_LOGO: './assets/token-logo.png',             // <-- your token image
-      BANNER_IMAGE: './assets/SiteBanner.png',           // <-- banner bg image
+      BRAND_LOGO: './assets/RVMB.png',
+      BANNER_IMAGE: './assets/SiteBanner.png',
       HERO_IMAGE: './assets/Hero1.png',
-      // IMPORTANT: relative path so it works under subfolders (e.g., GitHub Pages)
       HERO_CAROUSEL: { basePath:'./assets', prefix:'Hero', count:9, ext:'png', autoAdvanceMs:4500 },
       SOCIALS: { telegram:'', x:'https://x.com/rizzvember?s=21' },
       API: { donations:'/api/donations', nfts:'/api/nfts', alertsStream:'/stream/alerts', alertsPoll:'/api/alerts' },
@@ -421,11 +434,8 @@
         "Gym? I thought you said ‘groom.’ 🥸"
       ],
       DONATION: {
-        availableUSD: 4320,
-        totalDonatedUSD: 12850,
-        donationsCount: 9,
-        transactionsCount: 23,
-        milestoneUSD: 10000,
+        availableUSD: 4320, totalDonatedUSD: 12850,
+        donationsCount: 9, transactionsCount: 23, milestoneUSD: 10000,
         topCauses: [
           { name: "Movember Foundation", pct: 46, url: "https://ca.movember.com/" },
           { name: "CAMH Foundation", pct: 31, url: "https://www.camh.ca/" },
@@ -484,41 +494,46 @@
         { type:'buy', who:'5Gk…rV9', msg:'bought', amount:'0.42 SOL of $RVMB'},
         { type:'mint', who:'9Lm…2Qx', msg:'minted', amount:'MoBro #0123'},
         { type:'donate', who:'7Za…kP1', msg:'donated', amount:'$150 via TikTok'},
-      ]
-    }
+      ],
+      AUDIO: {
+        key:'rvmb_audio_enabled',
+        defaultVolume: 0.3
+      }
+    };
 
     /* ===================== UTIL ===================== */
-    const $ = (q,el=document)=>el.querySelector(q)
-    const $$ = (q,el=document)=>[...el.querySelectorAll(q)]
-    const fmtUSD = n => n.toLocaleString(undefined,{style:'currency',currency:'USD'})
+    const $ = (q,el=document)=>el.querySelector(q);
+    const $$ = (q,el=document)=>[...el.querySelectorAll(q)];
+    const fmtUSD = n => n.toLocaleString(undefined,{style:'currency',currency:'USD'});
 
     /* ======== PARTICLES ======== */
     function initParticles(){
-      const c = document.getElementById('particles'), x = c.getContext('2d')
-      let w,h; function size(){w=c.width=innerWidth; h=c.height=innerHeight} size(); addEventListener('resize',size)
-      const P = Array.from({length:70},()=>({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*2+0.5, vx:(Math.random()-.5)*.2, vy:(Math.random()-.5)*.2, hue:[0,35,205][Math.floor(Math.random()*3)] }))
-      ;(function step(){ x.clearRect(0,0,w,h); P.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1; x.beginPath(); x.arc(p.x,p.y,p.r,0,Math.PI*2); x.fillStyle=`hsla(${p.hue} 100% 60%/.6)`; x.fill() }); requestAnimationFrame(step) })()
+      const c = document.getElementById('particles'), x = c.getContext('2d');
+      let w,h; function size(){w=c.width=innerWidth; h=c.height=innerHeight} size(); addEventListener('resize',size);
+      const P = Array.from({length:70},()=>({ x:Math.random()*w, y:Math.random()*h, r:Math.random()*2+0.5, vx:(Math.random()-.5)*.2, vy:(Math.random()-.5)*.2, hue:[0,35,205][Math.floor(Math.random()*3)] }));
+      (function step(){ x.clearRect(0,0,w,h); P.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w) p.vx*=-1; if(p.y<0||p.y>h) p.vy*=-1; x.beginPath(); x.arc(p.x,p.y,p.r,0,Math.PI*2); x.fillStyle=`hsla(${p.hue} 100% 60%/.6)`; x.fill() }); requestAnimationFrame(step) })();
     }
 
     /* ======== FACTS MARQUEE ======== */
     function initFacts(){
-      const m = $('#factsMarquee'); const facts = CONFIG.FACTS
-      const row = facts.concat('•').concat(facts).map(f=>`<span style="padding:0 28px">${f}</span>`).join('')
-      m.innerHTML = row
+      const m = $('#factsMarquee'); const facts = CONFIG.FACTS;
+      const row = facts.concat('•').concat(facts).map(f=>`<span style="padding:0 28px">${f}</span>`).join('');
+      m.innerHTML = row;
     }
 
     /* ======== CONTRACT ======== */
     function initContractStrip(){
-      const addr = CONFIG.CONTRACT_ADDRESS
-      $('#caText').textContent = addr
-      $('#caText').addEventListener('click', async()=>{
-        try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
-      })
-      $('#copyBtn').addEventListener('click', async()=>{
-        try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!') }catch{ toast('Copy failed', true) }
-      })
-      $('#buyPump').href    = `https://pump.fun/coin/${addr}`
-      $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`
+      const addr = CONFIG.CONTRACT_ADDRESS;
+      $('#caText').textContent = addr;
+      const sfx = $('#sfxCoin');
+      async function copyCA(){
+        try{ await navigator.clipboard.writeText(addr); toast('Contract address copied!'); if(!audio.paused) sfx.currentTime=0, sfx.play().catch(()=>{}); }
+        catch{ toast('Copy failed', true); }
+      }
+      $('#caText').addEventListener('click', copyCA);
+      $('#copyBtn').addEventListener('click', copyCA);
+      $('#buyPump').href    = `https://pump.fun/coin/${addr}`;
+      $('#buyRaydium').href = `https://raydium.io/swap/?input=sol&output=${addr}`;
     }
 
     /* ======== DONATIONS ======== */
@@ -527,17 +542,17 @@
         const r = await fetch(CONFIG.API.donations, {cache:'no-store'});
         if(r.ok){ CONFIG.DONATION = await r.json(); }
       }catch(e){ /* fallback */ }
-      renderDonations(CONFIG.DONATION)
+      renderDonations(CONFIG.DONATION);
     }
     function renderDonations(d){
-      $('#availableAmount').textContent = fmtUSD(d.availableUSD)
-      $('#totalDonated').textContent    = fmtUSD(d.totalDonatedUSD)
-      $('#donationCount').textContent   = d.donationsCount
-      $('#txCount').textContent         = d.transactionsCount
-      const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD) * 100)))
-      $('#progressBar').style.width = pct + '%'
-      $('#topCauses').innerHTML = d.topCauses.map(c => `<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('')
-      $('#txList').innerHTML = d.txLog.map(t => `<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('')
+      $('#availableAmount').textContent = fmtUSD(d.availableUSD);
+      $('#totalDonated').textContent    = fmtUSD(d.totalDonatedUSD);
+      $('#donationCount').textContent   = d.donationsCount;
+      $('#txCount').textContent         = d.transactionsCount;
+      const pct = Math.max(0, Math.min(100, Math.round((d.availableUSD / d.milestoneUSD) * 100)));
+      $('#progressBar').style.width = pct + '%';
+      $('#topCauses').innerHTML = d.topCauses.map(c => `<a class="btn outline" href="${c.url}" target="_blank" rel="noopener" style="justify-content:space-between"><span>${c.name}</span><b>${c.pct}%</b></a>`).join('');
+      $('#txList').innerHTML = d.txLog.map(t => `<div class="tx"><div><div><b>${t.label}</b> <span class="muted">${t.hash}</span></div><div class="muted">${t.amount}</div></div><a class="pill" href="${t.url}" target="_blank" rel="noopener">View tx ↗</a></div>`).join('');
     }
 
     /* ======== NFTs ======== */
@@ -546,122 +561,185 @@
         const r = await fetch(CONFIG.API.nfts, {cache:'no-store'});
         if(r.ok){ CONFIG.NFT = await r.json(); }
       }catch(e){ /* fallback */ }
-      renderNFTs(CONFIG.NFT)
+      renderNFTs(CONFIG.NFT);
     }
     function renderNFTs(data){
-      const b = data.bro, s = data.sis
-      $('#broClaimed').textContent   = b.claimed
-      $('#broMinted').textContent    = b.minted
-      $('#broRemaining').textContent = b.remaining
-      $('#broRoyalties').textContent = fmtUSD(b.royaltiesUSD)
-      $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl
-      $('#broMints').innerHTML = (b.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('')
-      $('#sisClaimed').textContent   = s.claimed
-      $('#sisMinted').textContent    = s.minted
-      $('#sisRemaining').textContent = s.remaining
-      $('#sisRoyalties').textContent = fmtUSD(s.royaltiesUSD)
-      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl
-      $('#sisMints').innerHTML = (s.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('')
+      const b = data.bro, s = data.sis;
+      $('#broClaimed').textContent   = b.claimed;
+      $('#broMinted').textContent    = b.minted;
+      $('#broRemaining').textContent = b.remaining;
+      $('#broRoyalties').textContent = fmtUSD(b.royaltiesUSD);
+      $('#broMintNow').href = b.mintUrl; $('#broLMNFT').href = b.collectionUrl;
+      $('#broMints').innerHTML = (b.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mobro mint'/></div>`).join('');
+      $('#sisClaimed').textContent   = s.claimed;
+      $('#sisMinted').textContent    = s.minted;
+      $('#sisRemaining').textContent = s.remaining;
+      $('#sisRoyalties').textContent = fmtUSD(s.royaltiesUSD);
+      $('#sisMintNow').href = s.mintUrl; $('#sisLMNFT').href = s.collectionUrl;
+      $('#sisMints').innerHTML = (s.recentThumbs || []).map(src => `<div class='thumb'><img src='${src}' alt='mosista mint'/></div>`).join('');
     }
 
     /* ======== ROADMAP ======== */
     function initRoadmap(){
-      const wrap = $('#roadmapGrid'); const phases = CONFIG.ROADMAP
-      render(); setInterval(render, 1000)
+      const wrap = $('#roadmapGrid'); const phases = CONFIG.ROADMAP;
+      render(); setInterval(render, 1000);
       function render(){
-        const now = new Date()
+        const now = new Date();
         wrap.innerHTML = phases.map(p=>{
-          const start = new Date(p.start+"T00:00:00")
-          const end   = new Date(p.end+"T23:59:59")
-          let status = p.status
-          if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live'
-          const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase')
-          let label = 'Starts in', target = start
+          const start = new Date(p.start+"T00:00:00");
+          const end   = new Date(p.end+"T23:59:59");
+          let status = p.status;
+          if(now < start) status = 'next'; else if(now > end) status = 'done'; else status = 'live';
+          const cls   = status==='done' ? 'phase done' : (status==='live' ? 'phase live' : 'phase');
+          let label = 'Starts in', target = start;
           if(status==='live'){ label='Ends in'; target=end }
           if(status==='done'){ label='Ended' }
-          const timer = status==='done' ? '—' : miniCountdown(target)
+          const timer = status==='done' ? '—' : miniCountdown(target);
           return `<div class='${cls}'>
             <h3>${p.title}</h3>
             <div class='dates'>${start.toLocaleDateString()} – ${end.toLocaleDateString()}</div>
             <ul>${p.bullets.map(b=>`<li>${status==='done'?'✅ ':''}${b}</li>`).join('')}</ul>
             <span class='mini-eta pill'>⏳ ${label}: <b class='mono'>${timer}</b></span>
-          </div>`
-        }).join('')
+          </div>`;
+        }).join('');
       }
     }
     function miniCountdown(end){
-      const s = Math.max(0, Math.floor((end - new Date())/1000)); const d=Math.floor(s/86400), h=Math.floor((s%86400)/3600), m=Math.floor((s%3600)/60), sec=s%60
-      return `${d}d ${h}h ${m}m ${sec}s`
+      const s = Math.max(0, Math.floor((end - new Date())/1000)); const d=Math.floor(s/86400), h=Math.floor((s%86400)/3600), m=Math.floor((s%3600)/60), sec=s%60;
+      return `${d}d ${h}h ${m}m ${sec}s`;
     }
 
     /* ======== ALERTS ======== */
     function pushAlert({type,who,msg,amount}){
-      const box = document.createElement('div'); box.className='alert'
-      const icon = type==='buy'?'🟢':(type==='mint'?'🧢':'🎯')
-      box.innerHTML = `<div class='icon'>${icon}</div><div><b class='mono'>${who}</b> ${msg} <b>${amount}</b></div>`
-      $('#alerts').prepend(box)
-      box.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,fill:'forwards'})
-      setTimeout(()=>{ box.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}); setTimeout(()=>box.remove(),320)}, 6000)
+      const box = document.createElement('div'); box.className='alert';
+      const icon = type==='buy'?'🟢':(type==='mint'?'🧢':'🎯');
+      box.innerHTML = `<div class='icon'>${icon}</div><div><b class='mono'>${who}</b> ${msg} <b>${amount}</b></div>`;
+      $('#alerts').prepend(box);
+      box.animate([{opacity:0,transform:'translateY(8px)'},{opacity:1,transform:'translateY(0)'}],{duration:220,fill:'forwards'});
+      setTimeout(()=>{ box.animate([{opacity:1},{opacity:0}],{duration:300,fill:'forwards'}); setTimeout(()=>box.remove(),320)}, 6000);
     }
     function seedAlerts(){ CONFIG.ALERTS_SEED.forEach((a,i)=> setTimeout(()=>pushAlert(a), 1200 + i*1400)) }
     async function startRealtime(){
       try{
-        const es = new EventSource(CONFIG.API.alertsStream)
-        es.onmessage = (ev)=>{ try{ const a = JSON.parse(ev.data); if(a && a.type) pushAlert(a) }catch{} }
-        es.onerror = ()=>{ es.close(); startPoll() }
+        const es = new EventSource(CONFIG.API.alertsStream);
+        es.onmessage = (ev)=>{ try{ const a = JSON.parse(ev.data); if(a && a.type) pushAlert(a) }catch{} };
+        es.onerror = ()=>{ es.close(); startPoll() };
       }catch(e){ startPoll() }
       function startPoll(){
-        let since = Date.now()
+        let since = Date.now();
         setInterval(async()=>{
-          try{ const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'}); if(r.ok){ const arr = await r.json(); arr.forEach(a=>pushAlert(a)); since = Date.now() } }catch(e){}
-        }, 12000)
+          try{
+            const r = await fetch(`${CONFIG.API.alertsPoll}?since=${since}`, {cache:'no-store'});
+            if(r.ok){ const arr = await r.json(); arr.forEach(a=>pushAlert(a)); since = Date.now() }
+          }catch(e){}
+        }, 12000);
       }
     }
 
-    /* ======== TOASTS & AUDIO ======== */
-    function toast(msg, err=false){ const t=document.createElement('div'); t.textContent=msg; t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`; document.body.appendChild(t); setTimeout(()=>t.remove(), 1800) }
-    function initAudio(){ const audio=$('#bgAudio'), btn=$('#audioToggle'); let on=false; btn.addEventListener('click', async()=>{ try{ if(!on){ await audio.play(); on=true; btn.setAttribute('aria-pressed','true'); btn.textContent='🔇 Mute' } else { audio.pause(); on=false; btn.setAttribute('aria-pressed','false'); btn.textContent='🔊 Sound' } }catch(e){ toast('Autoplay blocked — click again to enable') } }) }
+    /* ======== TOASTS ======== */
+    function toast(msg, err=false){
+      const t=document.createElement('div');
+      t.textContent=msg;
+      t.style.cssText=`position:fixed;z-index:200;left:50%;top:18px;transform:translateX(-50%);padding:10px 14px;border-radius:12px;border:1px solid #ffffff22;background:${err?'#2a0f14':'#0f1712'};color:#fff;box-shadow:0 20px 50px #00000080`;
+      document.body.appendChild(t);
+      setTimeout(()=>t.remove(), 1800);
+    }
 
-    /* ======== HERO CAROUSEL ======== */
+    /* ======== AMBIENT AUDIO (user opt-in, persistent) ======== */
+    let audio;
+    function initAudio(){
+      const btn = $('#audioToggle');
+      audio = $('#bgAudio');
+      if(!btn || !audio) return;
+
+      // Respect reduced-motion/sound
+      const reduced =
+        (window.matchMedia && (window.matchMedia('(prefers-reduced-motion: reduce)').matches)) ||
+        (window.matchMedia && (window.matchMedia('(prefers-contrast: more)').matches));
+
+      const key = CONFIG.AUDIO.key;
+      const saved = localStorage.getItem(key);
+      const wantEnabled = saved === '1' && !reduced;
+
+      audio.volume = CONFIG.AUDIO.defaultVolume;
+      audio.muted  = !wantEnabled; // start muted unless previously enabled
+      setPressed(wantEnabled);
+
+      // Try to resume if user had it on, after first gesture (autoplay policies)
+      window.addEventListener('pointerdown', () => {
+        if(localStorage.getItem(key)==='1' && audio.paused && !reduced){
+          audio.play().catch(()=>{ /* user will click toggle if blocked */ });
+        }
+      }, { once:true });
+
+      btn.addEventListener('click', async () => {
+        if(audio.paused){
+          try{
+            audio.muted = false;
+            await audio.play();
+            localStorage.setItem(key,'1');
+            setPressed(true);
+          }catch{
+            toast('Click again to enable sound (browser blocked autoplay).');
+          }
+        }else{
+          audio.pause();
+          audio.muted = true;
+          localStorage.setItem(key,'0');
+          setPressed(false);
+        }
+      });
+
+      function setPressed(on){
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.textContent = on ? '🔊 Rizz On' : '🔈 Rizz Audio';
+      }
+    }
+
+    /* ======== HERO CAROUSEL (preload & recover) ======== */
     function buildHeroList(){
-      const hc = CONFIG.HERO_CAROUSEL
-      if(!hc || !hc.count) return [CONFIG.HERO_IMAGE]
-      return Array.from({length:hc.count},(_,i)=>`${hc.basePath}/${hc.prefix}${i+1}.${hc.ext}`)
+      const hc = CONFIG.HERO_CAROUSEL;
+      if(!hc || !hc.count) return [CONFIG.HERO_IMAGE];
+      return Array.from({length:hc.count},(_,i)=>`${hc.basePath}/${hc.prefix}${i+1}.${hc.ext}`);
     }
     function preloadImages(srcs){
       return Promise.all(srcs.map(s => new Promise(res=>{
-        const img = new Image(); img.onload=()=>res(s); img.onerror=()=>res(null); img.src=s;
-      }))).then(list => list.filter(Boolean))
+        const img = new Image();
+        img.onload=()=>res(s);
+        img.onerror=()=>res(null);
+        img.src=s;
+      }))).then(list => list.filter(Boolean));
     }
     async function initHeroCarousel(){
-      const root = $('#heroCarousel'), dots = $('#heroDots'); if(!root) return
-      let list = buildHeroList()
-      // Preload & drop broken paths (e.g., wrong extension or missing files)
-      list = await preloadImages(list)
-      if(!list.length){ list = [CONFIG.HERO_IMAGE] }
+      const root = $('#heroCarousel'), dots = $('#heroDots'); if(!root) return;
+      let list = buildHeroList();
+      list = await preloadImages(list);
+      if(!list.length){ list = [CONFIG.HERO_IMAGE] } // robust fallback
 
-      root.querySelectorAll('.hc-slide').forEach(n=>n.remove()); dots.innerHTML=''
+      root.querySelectorAll('.hc-slide').forEach(n=>n.remove()); dots.innerHTML='';
       list.forEach((src,idx)=>{
-        const d = document.createElement('div'); d.className='hc-slide'; d.style.backgroundImage=`url('${src}')`; if(idx===0) d.classList.add('active'); root.appendChild(d)
-        const b = document.createElement('button'); if(idx===0) b.classList.add('active'); b.addEventListener('click',()=>go(idx)); dots.appendChild(b)
-      })
-      let i=0, N=list.length, timer=null, ms=CONFIG.HERO_CAROUSEL?.autoAdvanceMs||5000
-      const slides = ()=>[...root.querySelectorAll('.hc-slide')]; const dotEls=()=>[...dots.querySelectorAll('button')]
+        const d = document.createElement('div'); d.className='hc-slide'; d.style.backgroundImage=`url('${src}')`; if(idx===0) d.classList.add('active'); root.appendChild(d);
+        const b = document.createElement('button'); if(idx===0) b.classList.add('active'); b.addEventListener('click',()=>go(idx)); dots.appendChild(b);
+      });
+      let i=0, N=list.length, timer=null, ms=CONFIG.HERO_CAROUSEL?.autoAdvanceMs||5000;
+      const slides = ()=>[...root.querySelectorAll('.hc-slide')];
+      const dotEls = ()=>[...dots.querySelectorAll('button')];
       function go(n){ i=(n+N)%N; slides().forEach((s,k)=>s.classList.toggle('active',k===i)); dotEls().forEach((d,k)=>d.classList.toggle('active',k===i)) }
       function play(){ timer = setInterval(()=>go(i+1), ms) }
       function stop(){ if(timer){ clearInterval(timer); timer=null } }
-      root.addEventListener('mouseenter', stop); root.addEventListener('mouseleave', play)
+      root.addEventListener('mouseenter', stop); root.addEventListener('mouseleave', play);
       root.querySelector('.hc-nav.prev').onclick=()=>{ stop(); go(i-1); play() }
       root.querySelector('.hc-nav.next').onclick=()=>{ stop(); go(i+1); play() }
-      play()
+      play();
     }
 
     /* ======== INIT ======== */
     function init(){
-      document.getElementById('year').textContent = new Date().getFullYear()
-      // images for logo + banner (ensures they show even if CSS bg failed)
-      const logo = $('#brandLogo'); if(logo && CONFIG.BRAND_LOGO) logo.src = CONFIG.BRAND_LOGO
-      const banner = $('#topBanner'); if(banner && CONFIG.BANNER_IMAGE) banner.style.backgroundImage = `url('${CONFIG.BANNER_IMAGE}')`
+      document.getElementById('year').textContent = new Date().getFullYear();
+
+      // Ensure token logo + banner always show even if CSS-only failed
+      const logo = $('#brandLogo'); if(logo && CONFIG.BRAND_LOGO) logo.src = CONFIG.BRAND_LOGO;
+      const banner = $('#topBanner'); if(banner && CONFIG.BANNER_IMAGE) banner.style.backgroundImage = `url('${CONFIG.BANNER_IMAGE}')`;
 
       initParticles(); initFacts(); initContractStrip();
       renderDonations(CONFIG.DONATION); renderNFTs(CONFIG.NFT);
@@ -671,7 +749,7 @@
       if(CONFIG.SOCIALS?.telegram){ const a=$('#tgLink'); if(a && CONFIG.SOCIALS.telegram){ a.href=CONFIG.SOCIALS.telegram; a.style.display=''; } }
       if(CONFIG.SOCIALS?.x){ const a=$('#xLink'); if(a) a.href=CONFIG.SOCIALS.x }
     }
-    document.addEventListener('DOMContentLoaded', init)
+    document.addEventListener('DOMContentLoaded', init);
   </script>
 </body>
 </html>
